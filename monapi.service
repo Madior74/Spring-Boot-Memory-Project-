@@ -1,0 +1,15 @@
+[Unit]
+Description=School Admin API Spring Boot service
+After=network.target
+
+[Service]
+User=mamadou
+WorkingDirectory=/home/mamadou/Desktop/Full_Stack/Spring_Flutter_Projects/Memory_project/SchoolAdmin_API
+ExecStart=/home/mamadou/Desktop/Full_Stack/Spring_Flutter_Projects/Memory_project/SchoolAdmin_API/mvnw spring-boot:run -Dspring-boot.run.arguments=--server.port=9000,--server.address=0.0.0.0
+SuccessExitStatus=143
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target
+
