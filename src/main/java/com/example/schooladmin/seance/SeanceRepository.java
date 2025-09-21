@@ -32,7 +32,7 @@ public interface SeanceRepository extends JpaRepository<Seance, Long> {
             @Param("heureDebut") LocalTime heureDebut,
             @Param("heureFin") LocalTime heureFin);
 
-    boolean existsBySalleAndDateSeanceAndHeures(Long salleId, LocalDate date, LocalTime heure);
+    // boolean existsBySalleAndDateSeanceAndHeures(Long salleId, LocalDate date, LocalTime heure);
 
     @Query("SELECT CASE WHEN COUNT(s) > 0 THEN true ELSE false END " +
             "FROM Seance s " +
