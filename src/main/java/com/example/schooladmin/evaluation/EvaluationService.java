@@ -9,6 +9,9 @@ import org.springframework.stereotype.Service;
 
 import com.example.schooladmin.anneeAcademique.AnneeAcademique;
 import com.example.schooladmin.anneeAcademique.AnneeAcademiqueService;
+import com.example.schooladmin.salle.SalleOccupancyService;
+import com.example.schooladmin.salle.SalleOccupiedException;
+import com.example.schooladmin.salle.SalleRepository;
 
 @Service
 public class EvaluationService {
@@ -19,41 +22,56 @@ public class EvaluationService {
     @Autowired
     private AnneeAcademiqueService anneeAcademiqueService;
 
+    @Autowired
+    private SalleRepository salleRepository;
+
+    @Autowired
+    private SalleOccupancyService salleOccupancyService;
+
     // Ajouter une évaluation
     public Evaluation addEvaluation(Evaluation evaluation) {
-                  //Verification de l'existence dune anne active
-    AnneeAcademique activatedAnnee=anneeAcademiqueService.getActiveAnneeAcademique();
-    if(activatedAnnee==null){
-        throw new RuntimeException("Aucune année académique active. Veuillez activer une année avant de créer une séance.");
-    }
+        // Verification de l'existence dune anne active
+        AnneeAcademique activatedAnnee = anneeAcademiqueService.getActiveAnneeAcademique();
+        if (activatedAnnee == null) {
+            throw new RuntimeException(
+                    "Aucune année académique active. Veuillez activer une année avant de créer une séance.");
+        }
 
-    evaluation.setCreePar(SecurityContextHolder.getContext().getAuthentication().getName());
-    evaluation.setDateCreation(LocalDateTime.now());
-    //Attribuer l'anne active
-    evaluation.setAnneeAcademique(anneeAcademiqueService.getActiveAnneeAcademique());
-        
+       
+        if (!salleOccupancyService.isSalleAvailableForEvaluation(
+                evaluation.getSalle().getId(),
+                evaluation.getDateEvaluation(),
+                evaluation.getHeureDebut(),
+                evaluation.getHeureFin(),
+                evaluation.getId() // null si création
+        )) {
+            throw new SalleOccupiedException("La salle est déjà occupée pour ce créneau.");
+        }
+
+        evaluation.setCreePar(SecurityContextHolder.getContext().getAuthentication().getName());
+        evaluation.setDateCreation(LocalDateTime.now());
+        // Attribuer l'anne active
+        evaluation.setAnneeAcademique(anneeAcademiqueService.getActiveAnneeAcademique());
+
         return evaluationRepository.save(evaluation);
     }
 
-
-    //Get All evaluations
+    // Get All evaluations
     public List<Evaluation> getAllEvaluations() {
         return evaluationRepository.findAll();
     }
 
-
-    //Get evaluation by id
+    // Get evaluation by id
     public Evaluation getEvaluationById(Long id) {
         return evaluationRepository.findById(id).orElse(null);
     }
 
-    //Delete evaluation by id
+    // Delete evaluation by id
     public void deleteEvaluation(Long id) {
         evaluationRepository.deleteById(id);
     }
 
-
-    //Update evaluation
+    // Update evaluation
     public Evaluation updateEvaluation(Long id, Evaluation evaluation) {
         Evaluation existingEvaluation = evaluationRepository.findById(id).orElse(null);
         if (existingEvaluation != null) {
@@ -63,20 +81,17 @@ public class EvaluationService {
             existingEvaluation.setHeureFin(evaluation.getHeureFin());
             existingEvaluation.setModule(evaluation.getModule());
             existingEvaluation.setProfesseur(evaluation.getProfesseur());
-                existingEvaluation.setDateModification(LocalDateTime.now());
-                existingEvaluation.setModifiePar(SecurityContextHolder.getContext().getAuthentication().getName());
+            existingEvaluation.setDateModification(LocalDateTime.now());
+            existingEvaluation.setModifiePar(SecurityContextHolder.getContext().getAuthentication().getName());
             return evaluationRepository.save(existingEvaluation);
         }
-      
-      
+
         return null;
     }
 
-
-
-    //Existence check
+    // Existence check
     public boolean evaluationExists(Long moduleId, LocalDate dateEvaluation) {
-        return evaluationRepository.existsByModuleIdAndDateEvaluation(moduleId,  dateEvaluation);
+        return evaluationRepository.existsByModuleIdAndDateEvaluation(moduleId, dateEvaluation);
     }
 
 }

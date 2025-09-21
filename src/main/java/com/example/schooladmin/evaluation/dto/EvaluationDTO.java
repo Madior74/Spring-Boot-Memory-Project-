@@ -8,7 +8,8 @@ import com.example.schooladmin.evaluation.Evaluation;
 import com.example.schooladmin.note.NoteDTO;
 
 import lombok.Getter;
-
+import lombok.Setter;
+@Setter
 @Getter
 public class EvaluationDTO {
 
@@ -41,4 +42,11 @@ public class EvaluationDTO {
                     .toList()
                 : List.of();
     }
+
+    public EvaluationDTO() {
+    }
+
+
+
+    
 }

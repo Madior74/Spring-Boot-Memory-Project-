@@ -67,9 +67,28 @@ public Seance createSeance(SeanceDTO dto) {
     if(activatedAnnee==null){
         throw new RuntimeException("Aucune année académique active. Veuillez activer une année avant de créer une séance.");
     }
-  
 
     Seance seance = new Seance();
+
+    if (!dto.isEstEnLigne() && dto.getSalleId() != null) {
+        boolean salleOccupee = salleRepository.isSalleUsedBySeance(
+                                    dto.getSalleId(),
+                                    dto.getDateSeance(),
+                                    dto.getHeureDebut(),
+                                    dto.getHeureFin())
+                            || salleRepository.isSalleUsedByEvaluation(
+                                    dto.getSalleId(),
+                                    dto.getDateSeance(),
+                                    dto.getHeureDebut(),
+                                    dto.getHeureFin());
+
+        if (salleOccupee) {
+            throw new RuntimeException("Salle déjà utilisée pour ce créneau.");
+        }
+
+        seance.setSalle(salleRepository.findById(dto.getSalleId()).orElse(null));
+    }
+  
     seance.setDateSeance(dto.getDateSeance());
     seance.setHeureDebut(dto.getHeureDebut());
     seance.setHeureFin(dto.getHeureFin());

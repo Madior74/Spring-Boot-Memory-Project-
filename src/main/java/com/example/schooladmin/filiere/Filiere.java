@@ -16,11 +16,15 @@ import jakarta.persistence.Id;
 
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 import lombok.Data;
 
 
 @Entity
 @Data
+@Table(name = "filiere",uniqueConstraints={
+    @UniqueConstraint(columnNames = {"nomFiliere"})
+})
 public class Filiere {
 
     @Id
