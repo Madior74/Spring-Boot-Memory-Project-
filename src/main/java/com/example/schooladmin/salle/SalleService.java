@@ -22,21 +22,42 @@ public class SalleService {
     @Autowired
     private SeanceRepository seanceRepository;
 
+    // get
+    public List<Salle> getAllSalles() {
+        return salleRepository.findAll();
+    }
 
-  
+    // public List<Salle> getAllSalles() {
+    // List<Salle> salles = salleRepository.findAll();
 
-       public List<Salle> getAllSalles() {
+    // LocalDate aujourdHui = LocalDate.now();
+    // LocalTime maintenant = LocalTime.now();
+
+    // for (Salle salle : salles) {
+    // boolean occupeeParSeance =
+    // seanceRepository.existsBySalleAndDateSeanceAndHeures(
+    // salle.getId(), aujourdHui, maintenant);
+
+    // boolean occupeeParEval =
+    // evaluationRepository.existsBySalleAndDateEvaluationAndHeures(
+    // salle.getId(), aujourdHui, maintenant);
+
+    // salle.setOccupee(occupeeParSeance || occupeeParEval);
+    // }
+
+    // return salles;
+    // }
+
+    // Salles with statut
+    public List<Salle> getAllSallesWithStatut(LocalDate date, LocalTime heureDebut, LocalTime heureFin) {
         List<Salle> salles = salleRepository.findAll();
 
-        LocalDate aujourdHui = LocalDate.now();
-        LocalTime maintenant = LocalTime.now();
-
         for (Salle salle : salles) {
-            boolean occupeeParSeance = seanceRepository.existsBySalleAndDateSeanceAndHeures(
-                    salle.getId(), aujourdHui, maintenant);
+            boolean occupeeParSeance = seanceRepository.existsConflictingSeances(
+                    salle.getId(), date, heureDebut, heureFin, null);
 
-            boolean occupeeParEval = evaluationRepository.existsBySalleAndDateEvaluationAndHeures(
-                    salle.getId(), aujourdHui, maintenant);
+            boolean occupeeParEval = evaluationRepository.existsConflictingEvaluations(
+                    salle.getId(), date, heureDebut, heureFin, null);
 
             salle.setOccupee(occupeeParSeance || occupeeParEval);
         }
@@ -45,22 +66,41 @@ public class SalleService {
     }
 
 
-    //Create
-    public Salle creatSalle(Salle salle){
+      public List<Salle> getAllSallesWithStatutNow() {
+        List<Salle> salles = salleRepository.findAll();
+
+        LocalDate aujourdHui = LocalDate.now();
+        LocalTime maintenant = LocalTime.now();
+
+        for (Salle salle : salles) {
+            boolean occupeeParSeance = seanceRepository.existsConflictingSeances(
+                    salle.getId(), aujourdHui, maintenant, maintenant, null);
+
+            boolean occupeeParEval = evaluationRepository.existsConflictingEvaluations(
+                    salle.getId(), aujourdHui, maintenant, maintenant, null);
+
+            salle.setOccupee(occupeeParSeance || occupeeParEval);
+        }
+
+        return salles;
+    }
+
+    
+
+    // Create
+    public Salle createSalle(Salle salle) {
         return salleRepository.save(salle);
 
     }
 
-
-    //delete
-    public void deleteSalle(Long id){
+    // delete
+    public void deleteSalle(Long id) {
         salleRepository.deleteById(id);
     }
 
-
-    //Existence
-    public boolean existsByNomSalle(String nomSalle){
+    // Existence
+    public boolean existsByNomSalle(String nomSalle) {
         return salleRepository.existsByNomSalle(nomSalle);
     }
-    
+
 }

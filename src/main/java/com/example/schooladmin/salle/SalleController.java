@@ -1,5 +1,7 @@
 package com.example.schooladmin.salle;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +33,21 @@ public class SalleController {
     public List<Salle> getAllSalles(){
         return salleService.getAllSalles();
     }
+
+
+       // Version maintenant
+    @GetMapping("/statut-now")
+    public List<Salle> getSallesAvecStatutNow() {
+        return salleService.getAllSallesWithStatutNow();
+    }
+
+    // Version créneau
+    @GetMapping("/statut")
+    public List<Salle> getSallesAvecStatut(@RequestParam LocalDate date,
+                                           @RequestParam LocalTime heureDebut,
+                                           @RequestParam LocalTime heureFin) {
+        return salleService.getAllSallesWithStatut(date, heureDebut, heureFin);
+    }
     
 
     //Create
@@ -41,7 +58,7 @@ public ResponseEntity<?> creerSalle(@RequestBody Salle salle, BindingResult resu
     }
     salleRepository.save(salle);
     return ResponseEntity.ok(salle);
-}
+}   
 
 
 

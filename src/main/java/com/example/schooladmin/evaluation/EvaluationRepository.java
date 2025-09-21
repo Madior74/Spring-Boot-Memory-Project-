@@ -14,7 +14,7 @@ public interface EvaluationRepository  extends JpaRepository<Evaluation,Long>{
 
     boolean existsByModuleIdAndDateEvaluation(Long moduleId, LocalDate dateEvaluation);
 
-    boolean existsBySalleAndDateEvaluationAndHeures(Long salleId, LocalDate date, LocalTime heure);
+    // boolean existsBySalleAndDateEvaluationAndHeures(Long salleId, LocalDate date, LocalTime heure);
 
        @Query("SELECT CASE WHEN COUNT(e) > 0 THEN true ELSE false END " +
            "FROM Evaluation e " +
