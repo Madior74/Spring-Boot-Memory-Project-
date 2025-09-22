@@ -28,7 +28,6 @@ public class AssiduiteService {
         }
         assiduite.setCreerPar(SecurityContextHolder.getContext().getAuthentication().getName());
         assiduite.setDatecreation(LocalDateTime.now());
-        assiduite.setAnneeAcademique(anneeAcademiqueService.getActiveAnneeAcademique());
         return assiduiteRepository.save(assiduite);
     }
 

@@ -48,8 +48,6 @@ public class Assiduite {
     @Enumerated(EnumType.STRING)
     private StatutPresence statutPresence = StatutPresence.PRESENT;
 
-      @ManyToOne
-    @JoinColumn(name = "annee_id", nullable = false)
-    private AnneeAcademique anneeAcademique;
+
 
 }
