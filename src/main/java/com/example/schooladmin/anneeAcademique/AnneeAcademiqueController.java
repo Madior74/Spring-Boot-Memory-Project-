@@ -9,16 +9,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-    @RestController
-    @RequestMapping("/api/admin/annees")
-    public class AnneeAcademiqueController {
+@RestController
+@RequestMapping("/api/admin/annees")
+public class AnneeAcademiqueController {
 
-        @Autowired
-        private AnneeAcademiqueService anneeAcademiqueService;
-
+    @Autowired
+    private AnneeAcademiqueService anneeAcademiqueService;
 
     @PostMapping("/save")
-        public ResponseEntity<AnneeAcademique> creategetAnneeAcademique(@RequestBody AnneeAcademique anneeAcademique) {
+    public ResponseEntity<AnneeAcademique> creategetAnneeAcademique(@RequestBody AnneeAcademique anneeAcademique) {
         if (anneeAcademique.getNomAnnee() == null || anneeAcademique.getNomAnnee().isEmpty()) {
             return ResponseEntity.badRequest().build(); // Retourne une erreur 400 si nomSession est nul ou vide
         }
@@ -26,14 +25,11 @@ import java.util.Optional;
         return ResponseEntity.status(HttpStatus.CREATED).body(createdSession);
     }
 
-
-
-
     @GetMapping("/{id}")
     public ResponseEntity<AnneeAcademique> getAnneeAcademique(@PathVariable Long id) {
         Optional<AnneeAcademique> session = anneeAcademiqueService.getAnneeAcademiqueById(id);
         return session.map(ResponseEntity::ok)
-                      .orElseGet(() -> ResponseEntity.notFound().build());
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @GetMapping
@@ -52,8 +48,7 @@ import java.util.Optional;
         return ResponseEntity.notFound().build();
     }
 
-
-    //Suppression d'une Annee
+    // Suppression d'une Annee
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteAnnee(@PathVariable Long id) {
         anneeAcademiqueService.deletegetAnneeAcademique(id);
@@ -67,10 +62,22 @@ import java.util.Optional;
         return ResponseEntity.noContent().build();
     }
 
-    //Verification de lexistence dune annee
+    // Verification de lexistence dune annee
     @GetMapping("/exists")
-    public ResponseEntity<Boolean> checkAnneeExists(@RequestParam String nomAnnee){
-        boolean exists=anneeAcademiqueService.existByNomAnnee(nomAnnee);
+    public ResponseEntity<Boolean> checkAnneeExists(@RequestParam String nomAnnee) {
+        boolean exists = anneeAcademiqueService.existByNomAnnee(nomAnnee);
         return ResponseEntity.ok(exists);
     }
+
+    // Récupérer l'année académique active
+    @GetMapping("/active")
+    public ResponseEntity<AnneeAcademique> getActiveAnnee() {
+        AnneeAcademique activeAnnee = anneeAcademiqueService.getActiveAnneeAcademique();
+        if (activeAnnee != null) {
+            return ResponseEntity.ok(activeAnnee);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
 }
+    

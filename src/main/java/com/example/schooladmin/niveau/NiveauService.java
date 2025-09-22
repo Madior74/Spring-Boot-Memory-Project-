@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import com.example.schooladmin.etudiant.etudiant.Etudiant;
 import com.example.schooladmin.etudiant.etudiant.EtudiantRepository;
 import com.example.schooladmin.filiere.Filiere;
+import com.example.schooladmin.seance.Seance;
 import com.example.schooladmin.semestre.Semestre;
 
 import lombok.Data;
@@ -62,5 +63,11 @@ public class NiveauService {
 
       public boolean existsByNomNiveauAndFiliere(String nomNiveau, Filiere filiere) {
         return niveauRepository.existsByNomNiveauAndFiliere(nomNiveau, filiere);
+    }
+
+
+    //EDT
+      public List<Seance> getEmploiDuTempsByNiveauId(Long niveauId) {
+        return niveauRepository.findSeancesByNiveauId(niveauId);
     }
 }

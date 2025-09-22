@@ -24,6 +24,6 @@ public class Salle {
     private String nomSalle;
     private String equipements;
 
-    @Transient // Ne sera pas enregistré en BDD
+    @Transient // Ne sera pas enregistré en BDD 
     private boolean occupee;
 }
