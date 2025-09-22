@@ -2,7 +2,6 @@ package com.example.schooladmin.etudiant.etudiant;
 
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.schooladmin.dto.FcmTokenDTO;
 
 @RestController
 @RequestMapping("/api/admin/inscriptions")
@@ -93,9 +91,4 @@ public class EtudiantController {
     // return etudiantRepository.findByFiliereId(filiereId);
     // }
 
-    @PostMapping("/etudiant/{etudiantId}/fcm-token")
-public ResponseEntity<Void> saveFcmToken(@PathVariable Long etudiantId, @RequestBody FcmTokenDTO dto) {
-    etudiantService.saveFcmToken(etudiantId, dto.getToken());
-    return ResponseEntity.ok().build();
-}
 }
