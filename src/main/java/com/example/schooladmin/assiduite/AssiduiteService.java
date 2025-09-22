@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PutMapping;
 
 import com.example.schooladmin.anneeAcademique.AnneeAcademiqueService;
+import com.example.schooladmin.note.Note;
 
 import lombok.AllArgsConstructor;
 
@@ -72,5 +73,12 @@ public class AssiduiteService {
     public void deleteAssiduite(final long id) {
         assiduiteRepository.deleteById(id);
     }
+
+
+    //Assiduite par etudiant
+      public List<Assiduite> getAssiduiteByEtudiantEmail(String email) {
+        return assiduiteRepository.findByEtudiantDossierAdmissionCandidatEmail(email);
+    }
+
 
 }

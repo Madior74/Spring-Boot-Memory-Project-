@@ -6,6 +6,8 @@ import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import com.example.schooladmin.note.Note;
+
 
 @Repository
 public interface  AssiduiteRepository  extends JpaRepository<Assiduite,Long> {
@@ -16,5 +18,10 @@ public interface  AssiduiteRepository  extends JpaRepository<Assiduite,Long> {
     
          //Assiduite By Seance
      List<Assiduite> findBySeanceId(Long seanceId);
+
+
+
+     // List<Note> findByEtudiantEmail(String email);
+        List<Assiduite> findByEtudiantDossierAdmissionCandidatEmail(String email);
 
 }   

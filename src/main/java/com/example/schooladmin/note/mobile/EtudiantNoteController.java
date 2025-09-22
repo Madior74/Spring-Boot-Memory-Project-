@@ -1,4 +1,4 @@
-package com.example.schooladmin.note;
+package com.example.schooladmin.note.mobile;
 
 import java.util.List;
 
@@ -9,7 +9,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.schooladmin.etudiant.candiddat.CandidatRepository;
+import com.example.schooladmin.note.Note;
+import com.example.schooladmin.note.NoteDTO;
+import com.example.schooladmin.note.NoteService;
 
 import lombok.RequiredArgsConstructor;
 
