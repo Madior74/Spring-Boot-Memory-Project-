@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.schooladmin.dto.FcmTokenDTO;
+
 @RestController
 @RequestMapping("/api/admin/inscriptions")
 public class EtudiantController {
@@ -90,4 +92,10 @@ public class EtudiantController {
     // filiereId) {
     // return etudiantRepository.findByFiliereId(filiereId);
     // }
+
+    @PostMapping("/etudiant/{etudiantId}/fcm-token")
+public ResponseEntity<Void> saveFcmToken(@PathVariable Long etudiantId, @RequestBody FcmTokenDTO dto) {
+    etudiantService.saveFcmToken(etudiantId, dto.getToken());
+    return ResponseEntity.ok().build();
+}
 }

@@ -1,9 +1,13 @@
 package com.example.schooladmin.niveau;
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.example.schooladmin.emplois_du_temps.EmploiDuTempsDTO;
 import com.example.schooladmin.etudiant.etudiant.Etudiant;
 import com.example.schooladmin.etudiant.etudiant.EtudiantRepository;
 import com.example.schooladmin.filiere.Filiere;
@@ -70,4 +74,23 @@ public class NiveauService {
       public List<Seance> getEmploiDuTempsByNiveauId(Long niveauId) {
         return niveauRepository.findSeancesByNiveauId(niveauId);
     }
+
+
+
+
+    public List<EmploiDuTempsDTO> getEmploiDuTempsDTOByNiveauId(Long niveauId) {
+    List<Seance> seances = niveauRepository.findSeancesByNiveauId(niveauId);
+    return seances.stream()
+                  .map(EmploiDuTempsDTO::new)
+                  .collect(Collectors.toList());
+}
+
+
+
+//affichage hebdomadaire
+public Map<LocalDate, List<EmploiDuTempsDTO>> getEmploiDuTempsGroupedByDay(Long niveauId) {
+    List<EmploiDuTempsDTO> emploiDuTemps = getEmploiDuTempsDTOByNiveauId(niveauId);
+    return emploiDuTemps.stream()
+                        .collect(Collectors.groupingBy(EmploiDuTempsDTO::getDate));
+}
 }

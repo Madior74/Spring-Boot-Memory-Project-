@@ -87,4 +87,19 @@ public class EtudiantService {
 
         return etudiantRepository.save(etudiant);
     }
+
+
+    public void saveFcmToken(Long etudiantId, String token) {
+        Etudiant etudiant = etudiantRepository.findById(etudiantId)
+                .orElseThrow(() -> new RuntimeException("Étudiant non trouvé avec ID : " + etudiantId));
+
+        etudiant.setFcmToken(token); 
+        etudiantRepository.save(etudiant);
+    }
+
+    public String getFcmTokenByEtudiantId(Long etudiantId) {
+        return etudiantRepository.findById(etudiantId)
+                .map(Etudiant::getFcmToken)
+                .orElse(null);
+    }
 }

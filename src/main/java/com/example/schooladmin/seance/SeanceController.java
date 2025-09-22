@@ -122,11 +122,5 @@ public ResponseEntity<Seance> createSeance(@RequestBody SeanceDTO dto) {
 
 
 
-    //     // Existence
-    // @GetMapping("/exists")
-    // public ResponseEntity<Boolean> checkFiliereExist(@RequestParam String nomSalle) {
-    //     boolean exists = seanceService.existeSeance(nomSalle);
-    //     return ResponseEntity.ok(exists);
-    // }
   
 }

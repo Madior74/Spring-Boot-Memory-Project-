@@ -4,14 +4,18 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import org.checkerframework.checker.units.qual.A;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import com.example.schooladmin.etudiant.etudiant.EtudiantRepository;
+import com.example.schooladmin.etudiant.etudiant.EtudiantService;
 import com.example.schooladmin.evaluation.Evaluation;
 import com.example.schooladmin.evaluation.EvaluationRepository;
 import com.example.schooladmin.professeur.ProfesseurRepository;
+import com.example.schooladmin.service.NotificationService;
+import com.google.firebase.messaging.FirebaseMessagingException;
 
 @Service
 public class NoteService {
@@ -23,7 +27,13 @@ public class NoteService {
     private EtudiantRepository etudiantRepository;
 
     @Autowired
+    private EtudiantService etudiantService;
+
+    @Autowired
     private EvaluationRepository evaluationRepository;
+
+    @Autowired
+    private NotificationService notificationService;
 
   
 
@@ -64,6 +74,22 @@ public class NoteService {
         newNote.setEtudiant(etudiantRepository.findById(dto.getEtudiantId()).orElseThrow());
         newNote.setEvaluation(evaluationRepository.findById(dto.getEvaluationId()).orElseThrow());
         newNote.setValeur(dto.getValeur());
+
+         // Récupérer le token FCM de l'étudiant
+    String fcmToken = etudiantService.getFcmTokenByEtudiantId(newNote.getEtudiant().getId());
+    
+    if (fcmToken != null) {
+        try {
+            notificationService.sendNoteCreatedNotification(
+                fcmToken,
+                "Nouvelle note attribuée !",
+                "Vous avez reçu une note de " + newNote.getValeur() + " pour l'évaluation " + newNote.getEvaluation().getType()
+            );
+        } catch (FirebaseMessagingException e) {
+            // Log l'erreur mais ne bloque pas la création de la note
+            System.err.println("Échec d'envoi de notification : " + e.getMessage());
+        }
+    }
 
         return noteRepository.save(newNote);
     }
