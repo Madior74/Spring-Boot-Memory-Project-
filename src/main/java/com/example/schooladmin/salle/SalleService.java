@@ -65,8 +65,7 @@ public class SalleService {
         return salles;
     }
 
-
-      public List<Salle> getAllSallesWithStatutNow() {
+    public List<Salle> getAllSallesWithStatutNow() {
         List<Salle> salles = salleRepository.findAll();
 
         LocalDate aujourdHui = LocalDate.now();
@@ -85,8 +84,6 @@ public class SalleService {
         return salles;
     }
 
-    
-
     // Create
     public Salle createSalle(Salle salle) {
         return salleRepository.save(salle);
@@ -101,6 +98,13 @@ public class SalleService {
     // Existence
     public boolean existsByNomSalle(String nomSalle) {
         return salleRepository.existsByNomSalle(nomSalle);
+    }
+
+    // Vérifier si salle utilisée par une séance ou évaluation
+    public boolean isSalleUsed(Long salleId, LocalDate date, LocalTime heureDebut, LocalTime heureFin) {
+        boolean usedBySeance = salleRepository.isSalleUsedBySeance(salleId, date, heureDebut, heureFin);
+        boolean usedByEvaluation = salleRepository.isSalleUsedByEvaluation(salleId, date, heureDebut, heureFin);
+        return usedBySeance || usedByEvaluation;
     }
 
 }

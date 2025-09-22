@@ -76,4 +76,21 @@ public ResponseEntity<?> creerSalle(@RequestBody Salle salle, BindingResult resu
         boolean exists = salleService.existsByNomSalle(nomSalle);
         return ResponseEntity.ok(exists);
     }
+
+
+    // Vérifier si salle utilisée par une séance ou évaluation
+    @GetMapping("/is-used")
+    public ResponseEntity<Boolean> checkSalleUsed(@RequestParam Long salleId,
+                                                   @RequestParam LocalDate date,
+                                                   @RequestParam LocalTime heureDebut,
+                                                   @RequestParam LocalTime heureFin) {
+        boolean isUsed = salleService.isSalleUsed(salleId, date, heureDebut, heureFin);
+        return ResponseEntity.ok(isUsed);
+    }
+
+
+    
+
+
+    
 }
