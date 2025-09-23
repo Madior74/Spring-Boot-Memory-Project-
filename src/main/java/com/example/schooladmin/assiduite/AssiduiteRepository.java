@@ -24,8 +24,8 @@ public interface  AssiduiteRepository  extends JpaRepository<Assiduite,Long> {
 
 
 
-     // List<Note> findByEtudiantEmail(String email);
-        List<Assiduite> findByEtudiantDossierAdmissionCandidatEmail(String email);
+    //  // List<Note> findByEtudiantEmail(String email);
+    //     List<Assiduite> findByEtudiantDossierAdmissionCandidatEmail(String email);
 
 
 
@@ -33,8 +33,5 @@ public interface  AssiduiteRepository  extends JpaRepository<Assiduite,Long> {
     @Query("SELECT a.seance FROM Assiduite a WHERE a.etudiant.id = :etudiantId")
     List<Seance> findSeancesByEtudiant(@Param("etudiantId") Long etudiantId);
 
-    // Récupérer uniquement les séances où l’étudiant est ABSENT
-  @Query("SELECT a.seance FROM Assiduite a WHERE a.etudiant.id = :etudiantId AND a.statutPresence = com.example.schooladmin.assiduite.StatutPresence.ABSENT")
-List<Seance> findSeancesAbsentesByEtudiant(@Param("etudiantId") Long etudiantId);
 
 }   

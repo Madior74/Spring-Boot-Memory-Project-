@@ -75,10 +75,6 @@ public class AssiduiteService {
     }
 
 
-    //Assiduite par etudiant
-      public List<Assiduite> getAssiduiteByEtudiantEmail(String email) {
-        return assiduiteRepository.findByEtudiantDossierAdmissionCandidatEmail(email);
-    }
-
+ 
 
 }

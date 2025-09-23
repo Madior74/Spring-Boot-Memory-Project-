@@ -1,4 +1,4 @@
-package com.example.schooladmin.note.mobile;
+package com.example.schooladmin.mobile;
 
 import java.util.List;
 

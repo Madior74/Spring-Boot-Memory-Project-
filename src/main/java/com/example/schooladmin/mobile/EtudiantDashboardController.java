@@ -8,11 +8,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.schooladmin.assiduite.Assiduite;
-import com.example.schooladmin.assiduite.AssiduiteDTO;
-import com.example.schooladmin.assiduite.AssiduiteService;
+
 import com.example.schooladmin.evaluation.Evaluation;
 import com.example.schooladmin.seance.Seance;
+import com.example.schooladmin.seance.SeanceDTO;
 
 import lombok.RequiredArgsConstructor;
 
@@ -22,15 +21,14 @@ import lombok.RequiredArgsConstructor;
 public class EtudiantDashboardController {
 
     private final EtudiantDashboardService dashboardService;
-        private final AssiduiteService assiduiteService;
 
 
        @GetMapping("/assiduites/mes-absences")
-    public ResponseEntity<List<AssiduiteDTO>> getMesAssiduites(Authentication authentication) {
+    public ResponseEntity<List<SeanceDTO>> getMesAssiduites(Authentication authentication) {
         String email = authentication.getName();
-        List<Assiduite> asd = assiduiteService.getAssiduiteByEtudiantEmail(email);
-        List<AssiduiteDTO> noteDTOs = asd.stream()
-                .map(AssiduiteDTO::new)
+        List<Seance> asd = dashboardService.getAssiduiteByEtudiantEmail(email);
+        List<SeanceDTO> noteDTOs = asd.stream()
+                .map(SeanceDTO::new)
                 .toList();
         return ResponseEntity.ok(noteDTOs);
     }

@@ -85,4 +85,10 @@ public interface SeanceRepository extends JpaRepository<Seance, Long> {
        "AND s.dateSeance > CURRENT_DATE")
 List<Seance> findSeancesProgrammeesByNiveau(@Param("niveauId") Long niveauId);
 
+//Absent
+
+    // Récupérer uniquement les séances où l’étudiant est ABSENT
+  @Query("SELECT a.seance FROM Assiduite a WHERE a.etudiant.id = :etudiantId AND a.statutPresence = com.example.schooladmin.assiduite.StatutPresence.ABSENT")
+List<Seance> findSeancesAbsentesByEtudiant(@Param("etudiantId") Long etudiantId);
+
 }

@@ -182,10 +182,10 @@ public Seance createSeance(SeanceDTO dto) {
 
 
 
-    //Seance par etudiant
-      public List<Assiduite> getSeanceByEtudiantEmail(String email) {
-        return assiduiteRepository.findByEtudiantDossierAdmissionCandidatEmail(email);
-    }
+    // //Seance par etudiant
+    //   public List<Assiduite> getSeanceByEtudiantEmail(String email) {
+    //     return assiduiteRepository.findByEtudiantDossierAdmissionCandidatEmail(email);
+    // }
 
 
 }
