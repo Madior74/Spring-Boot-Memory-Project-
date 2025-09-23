@@ -30,10 +30,10 @@ public interface EtudiantRepository extends JpaRepository<Etudiant, Long> {
     @Query("SELECT i FROM Etudiant i WHERE i.niveau.id = :niveauId")
     List<Etudiant> findByNiveauId(@Param("niveauId") Long niveauId);
 
-    @Query("SELECT e FROM Evaluation e " +
-            "WHERE e.estAnnulee = false " +
-            "AND e.dateEvaluation > CURRENT_DATE")
-    List<Evaluation> findEvaluationsProgrammees();
+@Query("SELECT e FROM Evaluation e " +
+       "WHERE e.dateEvaluation > CURRENT_DATE")
+List<Evaluation> findEvaluationsProgrammees();
+
 
     Optional<Etudiant> findByDossierAdmissionCandidatEmail(String email);
 
