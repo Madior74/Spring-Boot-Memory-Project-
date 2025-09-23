@@ -80,6 +80,6 @@ public interface SeanceRepository extends JpaRepository<Seance, Long> {
 
 
     // Récupérer toutes les séances programmées pour un niveau
-    @Query("SELECT s FROM Seance s WHERE s.niveau.id = :niveauId AND s.statut = 'PROGRAMME'")
+    @Query("SELECT s FROM Seance s WHERE s.niveau.id = :niveauId AND WHERE e.dateSeance > CURRENT_DATE")
     List<Seance> findSeancesProgrammeesByNiveau(@Param("niveauId") Long niveauId);
 }
