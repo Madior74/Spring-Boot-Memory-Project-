@@ -42,7 +42,7 @@ public interface EvaluationRepository extends JpaRepository<Evaluation, Long> {
 
     List<Evaluation> findBySalleIdAndDateEvaluation(Long salleId, LocalDate date);
 
-    @Query("SELECT e FROM Evaluation e" +
+    @Query("SELECT e FROM Evaluation e " +
             "WHERE e.module.ue.semestre.niveau.id = :niveauId " +
 
             "AND e.dateEvaluation > CURRENT_DATE")
