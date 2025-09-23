@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import com.example.schooladmin.assiduite.StatutPresence;
 import com.example.schooladmin.salle.Salle;
 
 public interface SeanceRepository extends JpaRepository<Seance, Long> {
@@ -88,7 +89,10 @@ List<Seance> findSeancesProgrammeesByNiveau(@Param("niveauId") Long niveauId);
 //Absent
 
     // Récupérer uniquement les séances où l’étudiant est ABSENT
-  @Query("SELECT a.seance FROM Assiduite a WHERE a.etudiant.id = :etudiantId AND a.statutPresence = com.example.schooladmin.assiduite.StatutPresence.ABSENT")
-List<Seance> findSeancesAbsentesByEtudiant(@Param("etudiantId") Long etudiantId);
+ @Query("SELECT a.seance FROM Assiduite a " +
+       "WHERE a.etudiant.id = :etudiantId AND a.statutPresence = :statut")
+List<Seance> findSeancesAbsentesByEtudiant(@Param("etudiantId") Long etudiantId,
+                                           @Param("statut") StatutPresence statut);
+
 
 }
