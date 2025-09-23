@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.schooladmin.assiduite.Assiduite;
 import com.example.schooladmin.assiduite.AssiduiteDTO;
 import com.example.schooladmin.assiduite.AssiduiteService;
+import com.example.schooladmin.evaluation.Evaluation;
 import com.example.schooladmin.seance.Seance;
 
 import lombok.RequiredArgsConstructor;
@@ -22,14 +23,6 @@ public class EtudiantDashboardController {
 
     private final EtudiantDashboardService dashboardService;
         private final AssiduiteService assiduiteService;
-
-
-    // @GetMapping
-    // public DashboardEtudiantDTO getDashboard(Authentication authentication) {
-    //     // Email de l’étudiant connecté via Spring Security
-    //     String email = authentication.getName();
-    //     return dashboardService.getDashboardByEmail(email);
-    // }
 
 
        @GetMapping("/assiduites/mes-absences")
@@ -52,9 +45,9 @@ public class EtudiantDashboardController {
 
 
       @GetMapping("/evaluations")
-    public List<Seance> getEvaluationByNiveau(Authentication authentication){
+    public List<Evaluation> getEvaluationProgrammeesByNiveau(Authentication authentication){
                 String email = authentication.getName();
-                return dashboardService.getSeanceByEtudiant(email);
+                return dashboardService.getEvaluationProgrammeesByNiveauId(email);
 
     }
 
