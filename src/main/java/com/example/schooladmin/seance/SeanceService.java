@@ -179,5 +179,13 @@ public Seance createSeance(SeanceDTO dto) {
                 .sum();
     }
 
-    // Existence d'une Salle
+
+
+
+    //Seance par etudiant
+      public List<Assiduite> getSeanceByEtudiantEmail(String email) {
+        return assiduiteRepository.findByEtudiantDossierAdmissionCandidatEmail(email);
+    }
+
+
 }

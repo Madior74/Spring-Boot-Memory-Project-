@@ -40,4 +40,10 @@ public interface EvaluationRepository  extends JpaRepository<Evaluation,Long>{
                                                 @Param("evaluationIdToExclude") Long evaluationIdToExclude);
 
     List<Evaluation> findBySalleIdAndDateEvaluation(Long salleId, LocalDate date);
+
+
+
+     // Récupérer toutes les évaluations programmées
+    @Query("SELECT e FROM Evaluation e WHERE e.statut = 'PROGRAMME'")
+    List<Evaluation> findEvaluationsProgrammees();
 }

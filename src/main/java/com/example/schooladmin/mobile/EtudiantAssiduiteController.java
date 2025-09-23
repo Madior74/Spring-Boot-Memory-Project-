@@ -1,4 +1,4 @@
-package com.example.schooladmin.assiduite.mobile;
+package com.example.schooladmin.mobile;
 
 import java.util.List;
 
