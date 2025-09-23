@@ -34,7 +34,7 @@ public interface  AssiduiteRepository  extends JpaRepository<Assiduite,Long> {
     List<Seance> findSeancesByEtudiant(@Param("etudiantId") Long etudiantId);
 
     // Récupérer uniquement les séances où l’étudiant est ABSENT
-    @Query("SELECT a.seance FROM Assiduite a WHERE a.etudiant.id = :etudiantId AND a.statut = 'ABSENT'")
-    List<Seance> findSeancesAbsentesByEtudiant(@Param("etudiantId") Long etudiantId);
+  @Query("SELECT a.seance FROM Assiduite a WHERE a.etudiant.id = :etudiantId AND a.statutPresence = com.example.schooladmin.assiduite.StatutPresence.ABSENT")
+List<Seance> findSeancesAbsentesByEtudiant(@Param("etudiantId") Long etudiantId);
 
 }   
