@@ -16,12 +16,6 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/api/etudiants/salees")
 public class EtudiantSalleController {
 
-    private final SalleService salleService;
-
-
-       @GetMapping("/statut-now")
-    public List<Salle> getSallesAvecStatutNow() {
-        return salleService.getAllSallesWithStatutNow();
-    }
+   
     
 }

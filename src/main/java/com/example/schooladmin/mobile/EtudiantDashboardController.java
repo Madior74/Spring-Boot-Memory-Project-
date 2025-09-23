@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 import com.example.schooladmin.evaluation.Evaluation;
+import com.example.schooladmin.salle.Salle;
+import com.example.schooladmin.salle.SalleService;
 import com.example.schooladmin.seance.Seance;
 import com.example.schooladmin.seance.SeanceDTO;
 
@@ -49,6 +51,15 @@ public class EtudiantDashboardController {
 
     }
 
+
+    //Salles
+     private final SalleService salleService;
+
+
+       @GetMapping("/salles/statut-now")
+    public List<Salle> getSallesAvecStatutNow() {
+        return salleService.getAllSallesWithStatutNow();
+    }
 
 
 }
