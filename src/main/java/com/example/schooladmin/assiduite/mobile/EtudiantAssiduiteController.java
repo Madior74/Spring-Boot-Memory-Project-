@@ -16,7 +16,7 @@ import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/etudiant/notes")
+@RequestMapping("/api/etudiants/assiduites")
 public class EtudiantAssiduiteController {
 
     private final AssiduiteService assiduiteService;

@@ -144,6 +144,8 @@ public ResponseEntity<Filiere> getFiliereByNiveauId(@PathVariable Long niveauId)
 
 
 
+    //EDT
+
     @GetMapping("/{id}/emploi-du-temps")
     public ResponseEntity<List<EmploiDuTempsDTO>> getEmploiDuTemps(@PathVariable Long id) {
         List<EmploiDuTempsDTO> emploi = niveauService.getEmploiDuTempsDTOByNiveauId(id);
