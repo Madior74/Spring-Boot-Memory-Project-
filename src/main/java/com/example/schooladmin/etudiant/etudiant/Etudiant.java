@@ -61,6 +61,5 @@ public class Etudiant {
 
     private String inscritPar;
 
-    @Column
-    private String fcmToken;
+ 
 }
