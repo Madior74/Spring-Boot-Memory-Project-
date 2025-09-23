@@ -41,9 +41,7 @@ public interface EvaluationRepository  extends JpaRepository<Evaluation,Long>{
 
     List<Evaluation> findBySalleIdAndDateEvaluation(Long salleId, LocalDate date);
 
-
-
-@Query("SELECT e FROM Evaluation e WHERE e.statut = 'PROGRAMME'")
+@Query("SELECT e FROM Evaluation e WHERE e.dateEvaluation > CURRENT_DATE")
 List<Evaluation> findEvaluationsProgrammees();
 
 }
