@@ -43,7 +43,7 @@ public interface EvaluationRepository  extends JpaRepository<Evaluation,Long>{
 
 
 
-     // Récupérer toutes les évaluations programmées
-    @Query("SELECT e FROM Evaluation e WHERE e.statut = 'PROGRAMME'")
-    List<Evaluation> findEvaluationsProgrammees();
+@Query("SELECT e FROM Evaluation e WHERE e.statut = 'PROGRAMME'")
+List<Evaluation> findEvaluationsProgrammees();
+
 }
