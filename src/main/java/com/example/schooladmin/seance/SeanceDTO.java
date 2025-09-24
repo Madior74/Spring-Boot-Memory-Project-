@@ -30,6 +30,7 @@ public class SeanceDTO {
     private boolean estAnnulee;
 
     private Long salleId;
+    private String nomSalle;
     private Long moduleId;
     private String nomModule;
     private String nomProf;
@@ -52,6 +53,7 @@ public class SeanceDTO {
         this.dateCreation=seance.getDateCreation();
         if (!seance.isEstEnLigne()) {
             this.salleId = seance.getSalle() != null ? seance.getSalle().getId() : null;
+            this.nomSalle = seance.getSalle() != null ? seance.getSalle().getNomSalle() : null;
         }
         this.moduleId = seance.getModule() != null ? seance.getModule().getId() : null;
         this.nomModule = seance.getModule() != null ? seance.getModule().getNomModule() : null;

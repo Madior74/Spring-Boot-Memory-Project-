@@ -133,5 +133,19 @@ public class EtudiantDashboardController {
         return ResponseEntity.ok(dto);
     }
   
-  
+    //recupererEtudiantParId
+    @GetMapping("/mon-profil")
+    public ResponseEntity<?> getEtudiantById(Authentication authentication) {
+
+        String email = authentication.getName();
+        try {
+            return ResponseEntity.ok(dashboardService.recupererEtudiantParId(email));
+        } catch (RuntimeException e) {
+            Map<String, String> errorResponse = new HashMap<>();
+            errorResponse.put("status", "ERROR");
+            errorResponse.put("message", e.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
+        }
+    }
+
   }

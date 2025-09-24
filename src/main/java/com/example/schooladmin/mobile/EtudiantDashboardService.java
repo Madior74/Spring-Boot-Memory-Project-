@@ -1,12 +1,15 @@
 package com.example.schooladmin.mobile;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
 import com.example.schooladmin.assiduite.Assiduite;
 import com.example.schooladmin.assiduite.AssiduiteRepository;
 import com.example.schooladmin.assiduite.StatutPresence;
+import com.example.schooladmin.etudiant.candiddat.Candidat;
+import com.example.schooladmin.etudiant.candiddat.CandidatRepository;
 import com.example.schooladmin.etudiant.etudiant.Etudiant;
 import com.example.schooladmin.etudiant.etudiant.EtudiantRepository;
 import com.example.schooladmin.evaluation.Evaluation;
@@ -24,12 +27,12 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class EtudiantDashboardService {
 
-    private final AssiduiteRepository assiduiteRepository;
     private final SeanceRepository seanceRepository;
     private final EvaluationRepository evaluationRepository;
     private final EtudiantRepository etudiantRepository;
     private final SemestreRepository semestreRepository;
     private final NoteRepository noteRepository;
+    private final CandidatRepository candidatPreInscritRepository;
 
     public List<Seance> getSeanceByEtudiant(String email) {
         Etudiant etudiant = etudiantRepository.findByDossierAdmissionCandidatEmail(email)
@@ -76,4 +79,17 @@ public List<Semestre> getSemestresByEtudiant(String email) {
      public List<Note> getNotesByEtudiantEmail(String email) {
         return noteRepository.findByEtudiantDossierAdmissionCandidatEmail(email);
     }
+
+
+    //recupererEtudiantParId
+        public Optional<Candidat> recupererEtudiantParId(String  email) {
+
+              Etudiant etudiant = etudiantRepository.findByDossierAdmissionCandidatEmail(email)
+                .orElseThrow(() -> new RuntimeException("Étudiant introuvable avec email : " + email));
+
+        Long etudiantId = etudiant.getDossierAdmission().getCandidat().getId();
+
+        return candidatPreInscritRepository.findById(etudiantId);
+    }
+
 }
