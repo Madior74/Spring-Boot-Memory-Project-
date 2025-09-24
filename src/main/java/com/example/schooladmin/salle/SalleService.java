@@ -1,8 +1,10 @@
 package com.example.schooladmin.salle;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,6 +26,10 @@ public class SalleService {
 
     @Autowired
     private SeanceRepository seanceRepository;
+
+        // Définir le fuseau horaire cible (Europe/Paris)
+    private static final ZoneId TARGET_ZONE = ZoneId.of("Europe/Paris");
+
 
     // get
     public List<Salle> getAllSalles() {
@@ -111,22 +117,28 @@ public class SalleService {
         }
         return salles;
     }
-    
-    // NOUVELLE méthode avec statut détaillé
+
     public List<SalleStatutDTO> getAllSallesWithStatutDetaille() {
         List<Salle> salles = salleRepository.findAll();
-        LocalDate aujourdHui = LocalDate.now();
-        LocalTime maintenant = LocalTime.now();
+        
+        // Utiliser l'heure européenne plutôt que l'heure du serveur
+        ZonedDateTime nowInEurope = ZonedDateTime.now(TARGET_ZONE);
+        LocalDate aujourdHui = nowInEurope.toLocalDate();
+        LocalTime maintenant = nowInEurope.toLocalTime();
+        
+        System.out.println("=== DEBUG TIMEZONE ===");
+        System.out.println("Heure serveur (Oregon): " + LocalDateTime.now());
+        System.out.println("Heure Europe: " + maintenant);
+        System.out.println("Date Europe: " + aujourdHui);
         
         List<SalleStatutDTO> resultat = new ArrayList<>();
         
         for (Salle salle : salles) {
-            // Vérifier si une séance est en cours MAINTENANT
             boolean occupeeMaintenant = seanceRepository.existsSeanceEnCours(
                     salle.getId(), aujourdHui, maintenant);
-            
-            // Vérifier s'il y a eu une séance aujourd'hui (même terminée)
-            boolean avaitSeanceAujourdhui = seanceRepository.existsSeanceAujourdhui(
+
+
+                        boolean avaitSeanceAujourdhui = seanceRepository.existsSeanceAujourdhui(
                     salle.getId(), aujourdHui);
             
             // Vérifier les évaluations en cours
@@ -146,12 +158,15 @@ public class SalleService {
                     avaitSeanceAujourdhui,
                     null // Le statut sera calculé automatiquement
             );
-            
             resultat.add(dto);
+            
         }
         
         return resultat;
     }
+
+    
+
 
 
 }

@@ -12,6 +12,7 @@ import com.example.schooladmin.evaluation.Evaluation;
 import com.example.schooladmin.evaluation.dto.EvaluationDTO;
 import com.example.schooladmin.salle.Salle;
 import com.example.schooladmin.salle.SalleService;
+import com.example.schooladmin.salle.SalleStatutDTO;
 import com.example.schooladmin.seance.Seance;
 import com.example.schooladmin.seance.SeanceDTO;
 import com.example.schooladmin.semestre.Semestre;
@@ -60,6 +61,12 @@ public class EtudiantDashboardController {
   public List<Salle> getSallesAvecStatutNow() {
     return salleService.getAllSallesWithStatutNow();
   }
+
+        @GetMapping("/statut-detaille")
+    public List<SalleStatutDTO> getSallesStatutDetaille() {
+        return salleService.getAllSallesWithStatutDetaille();
+    }
+    
   
   //Semestre Etudiant
   @GetMapping("/semestres")

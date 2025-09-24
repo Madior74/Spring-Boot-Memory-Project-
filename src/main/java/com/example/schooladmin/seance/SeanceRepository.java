@@ -61,13 +61,13 @@ public interface SeanceRepository extends JpaRepository<Seance, Long> {
                      @Param("heureFin") LocalTime heureFin,
                      @Param("seanceIdToExclude") Long seanceIdToExclude);
 
-       // Méthode existante - vérifie si une séance est en cours MAINTENANT
+      // Méthode existante - AJOUTEZ le fuseau horaire
     @Query("SELECT CASE WHEN COUNT(s) > 0 THEN true ELSE false END " +
            "FROM Seance s " +
            "WHERE s.salle.id = :salleId " +
            "  AND s.dateSeance = :date " +
            "  AND s.estAnnulee = false " +
-           "  AND :heureCourante BETWEEN s.heureDebut AND s.heureFin")
+           "  AND CAST(:heureCourante AS time) BETWEEN s.heureDebut AND s.heureFin")
     boolean existsSeanceEnCours(@Param("salleId") Long salleId,
                                @Param("date") LocalDate date,
                                @Param("heureCourante") LocalTime heureCourante);
@@ -112,7 +112,7 @@ public interface SeanceRepository extends JpaRepository<Seance, Long> {
        // Récupérer toutes les séances programmées pour un niveau
        @Query("SELECT s FROM Seance s " +
                      "WHERE s.module.ue.semestre.niveau.id = :niveauId " +
-                     "AND s.dateSeance > CURRENT_DATE")
+                     "AND s.dateSeance >= CURRENT_DATE")
        List<Seance> findSeancesProgrammeesByNiveau(@Param("niveauId") Long niveauId);
 
        // Absent

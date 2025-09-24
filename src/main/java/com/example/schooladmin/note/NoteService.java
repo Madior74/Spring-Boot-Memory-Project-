@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import com.example.schooladmin.etudiant.etudiant.Etudiant;
 import com.example.schooladmin.etudiant.etudiant.EtudiantRepository;
 import com.example.schooladmin.etudiant.etudiant.EtudiantService;
 import com.example.schooladmin.evaluation.Evaluation;
@@ -53,27 +54,26 @@ public class NoteService {
     }
 
     // ajouter une note
-    public Note createNote(NoteCreationDTO dto) {
-        Evaluation evaluation = evaluationRepository.findById(dto.getEvaluationId())
-                .orElseThrow(() -> new IllegalArgumentException("Évaluation introuvable"));
+  public Note createNote(NoteCreationDTO dto) {
+    Evaluation evaluation = evaluationRepository.findById(dto.getEvaluationId())
+            .orElseThrow(() -> new IllegalArgumentException("Évaluation introuvable"));
 
-        // Vérification si la note existe déjà
-        if (noteRepository.existsByEtudiantIdAndEvaluationId(
-                dto.getEtudiantId(), dto.getEvaluationId())) {
-            throw new IllegalArgumentException("Note déjà attribuée pour cette évaluation");
-        }
-
-        Note newNote = new Note();
-        newNote.setCreePar(SecurityContextHolder.getContext().getAuthentication().getName());
-        newNote.setDateCreation(LocalDateTime.now());
-        newNote.setEtudiant(etudiantRepository.findById(dto.getEtudiantId()).orElseThrow());
-        newNote.setEvaluation(evaluationRepository.findById(dto.getEvaluationId()).orElseThrow());
-        newNote.setValeur(dto.getValeur());
-
-  
-
-        return noteRepository.save(newNote);
+    if (noteRepository.existsByEtudiantIdAndEvaluationId(dto.getEtudiantId(), dto.getEvaluationId())) {
+        throw new IllegalArgumentException("Note déjà attribuée pour cette évaluation");
     }
+
+    Etudiant etudiant = etudiantRepository.findById(dto.getEtudiantId())
+            .orElseThrow(() -> new IllegalArgumentException("Étudiant introuvable"));
+
+    Note newNote = new Note();
+    newNote.setCreePar(SecurityContextHolder.getContext().getAuthentication().getName());
+    newNote.setDateCreation(LocalDateTime.now());
+    newNote.setEtudiant(etudiant);
+    newNote.setEvaluation(evaluation);
+    newNote.setValeur(dto.getValeur());
+
+    return noteRepository.save(newNote);
+}
 
     // supprimer une note
     public void deleteNote(Long id) {
