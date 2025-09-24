@@ -18,7 +18,7 @@ public class NoteCreationDTO {
 
 
     public NoteCreationDTO(Note note) {
-        this.etudiantId = note.getEtudiant().getId();
+        this.etudiantId = note.getEtudiant() != null ? note.getEtudiant().getId(): null;
         this.evaluationId = note.getEvaluation().getId();
         this.valeur = note.getValeur();
     

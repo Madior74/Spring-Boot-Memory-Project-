@@ -42,6 +42,7 @@ public class NoteController {
     @PostMapping("/save")
     public ResponseEntity<NoteDTO> createNote(@RequestBody NoteCreationDTO dto) {
 
+System.out.println("Received NoteCreationDTO: " + dto);
         Note note = noteService.createNote(dto);
         NoteDTO noteDTO = new NoteDTO(note); // Assuming NoteDTO has a constructor that accepts Note
         return ResponseEntity.status(HttpStatus.CREATED).body(noteDTO);
