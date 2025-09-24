@@ -41,13 +41,7 @@ public class SalleController {
         return salleService.getAllSallesWithStatutNow();
     }
 
-    // Version créneau
-    @GetMapping("/statut")
-    public List<Salle> getSallesAvecStatut(@RequestParam LocalDate date,
-                                           @RequestParam LocalTime heureDebut,
-                                           @RequestParam LocalTime heureFin) {
-        return salleService.getAllSallesWithStatut(date, heureDebut, heureFin);
-    }
+ 
     
 
     //Create

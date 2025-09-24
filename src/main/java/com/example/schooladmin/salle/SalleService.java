@@ -49,21 +49,21 @@ public class SalleService {
     // }
 
     // Salles with statut
-    public List<Salle> getAllSallesWithStatut(LocalDate date, LocalTime heureDebut, LocalTime heureFin) {
-        List<Salle> salles = salleRepository.findAll();
+    // public List<Salle> getAllSallesWithStatut(LocalDate date, LocalTime heureDebut, LocalTime heureFin) {
+    //     List<Salle> salles = salleRepository.findAll();
 
-        for (Salle salle : salles) {
-            boolean occupeeParSeance = seanceRepository.existsConflictingSeances(
-                    salle.getId(), date, heureDebut, heureFin, null);
+    //     for (Salle salle : salles) {
+    //         boolean occupeeParSeance = seanceRepository.existsConflictingSeances(
+    //                 salle.getId(), date, heureDebut, heureFin, null);
 
-            boolean occupeeParEval = evaluationRepository.existsConflictingEvaluations(
-                    salle.getId(), date, heureDebut, heureFin, null);
+    //         boolean occupeeParEval = evaluationRepository.existsConflictingEvaluations(
+    //                 salle.getId(), date, heureDebut, heureFin, null);
 
-            salle.setOccupee(occupeeParSeance || occupeeParEval);
-        }
+    //         salle.setOccupee(occupeeParSeance || occupeeParEval);
+    //     }
 
-        return salles;
-    }
+    //     return salles;
+    // }
 
     public List<Salle> getAllSallesWithStatutNow() {
         List<Salle> salles = salleRepository.findAll();
