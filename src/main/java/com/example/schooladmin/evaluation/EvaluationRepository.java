@@ -45,7 +45,7 @@ public interface EvaluationRepository extends JpaRepository<Evaluation, Long> {
     @Query("SELECT e FROM Evaluation e " +
             "WHERE e.module.ue.semestre.niveau.id = :niveauId " +
 
-            "AND e.dateEvaluation > CURRENT_DATE")
+            "AND e.dateEvaluation >= CURRENT_DATE")
     List<Evaluation> findEvaluationsProgrammeesByNiveau(@Param("niveauId") Long niveauId);
 
 }

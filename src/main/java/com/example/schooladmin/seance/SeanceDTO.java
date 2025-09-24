@@ -31,6 +31,9 @@ public class SeanceDTO {
 
     private Long salleId;
     private Long moduleId;
+    private String nomModule;
+    private String nomProf;
+    private String prenomProf;
     private Long professeurId;
     private Long anneeAcademiqueId;
     private LocalDateTime dateCreation;
@@ -51,7 +54,11 @@ public class SeanceDTO {
             this.salleId = seance.getSalle() != null ? seance.getSalle().getId() : null;
         }
         this.moduleId = seance.getModule() != null ? seance.getModule().getId() : null;
+        this.nomModule = seance.getModule() != null ? seance.getModule().getNomModule() : null;
+
         this.professeurId = seance.getProfesseur() != null ? seance.getProfesseur().getId() : null;
+        this.nomProf = seance.getProfesseur() != null ? seance.getProfesseur().getNom() : null;
+        this.prenomProf = seance.getProfesseur() != null ? seance.getProfesseur().getPrenom() : null;
         this.anneeAcademiqueId = seance.getAnneeAcademique() != null ? seance.getAnneeAcademique().getId() : null;
     }
   

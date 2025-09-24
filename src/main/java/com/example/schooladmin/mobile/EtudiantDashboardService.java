@@ -38,7 +38,7 @@ public class EtudiantDashboardService {
     }
 
     
-
+    //Evaluations
     public List<Evaluation> getEvaluationProgrammeesByNiveauId(String email) {
         Etudiant etudiant = etudiantRepository.findByDossierAdmissionCandidatEmail(email)
                 .orElseThrow(() -> new RuntimeException("Étudiant introuvable avec email : " + email));
@@ -58,7 +58,7 @@ public class EtudiantDashboardService {
     Etudiant etudiant = etudiantRepository.findByDossierAdmissionCandidatEmail(email)
           .orElseThrow(() -> new RuntimeException("Étudiant introuvable avec email : " + email));
 
-    Long etudiantId = etudiant.getId(); // ✅ CORRECTION
+    Long etudiantId = etudiant.getId(); 
     return seanceRepository.findSeancesAbsentesByEtudiant(etudiantId, StatutPresence.ABSENT);
 }
 
