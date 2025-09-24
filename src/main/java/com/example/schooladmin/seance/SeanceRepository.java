@@ -37,37 +37,36 @@ public interface SeanceRepository extends JpaRepository<Seance, Long> {
        // LocalTime heure);
 
        // @Query("SELECT CASE WHEN COUNT(s) > 0 THEN true ELSE false END " +
-       //               "FROM Seance s " +
-       //               "WHERE s.salle.id = :salleId " +
-       //               "  AND s.dateSeance = :date " +
-       //               "  AND s.estAnnulee = false " +
-       //               "  AND (s.heureDebut < :heureFin AND s.heureFin > :heureDebut) " +
-       //               "  AND (:seanceIdToExclude IS NULL OR s.id <> :seanceIdToExclude)")
+       // "FROM Seance s " +
+       // "WHERE s.salle.id = :salleId " +
+       // " AND s.dateSeance = :date " +
+       // " AND s.estAnnulee = false " +
+       // " AND (s.heureDebut < :heureFin AND s.heureFin > :heureDebut) " +
+       // " AND (:seanceIdToExclude IS NULL OR s.id <> :seanceIdToExclude)")
        // boolean existsConflictingSeances(@Param("salleId") Long salleId,
-       //               @Param("date") LocalDate date,
-       //               @Param("heureDebut") LocalTime heureDebut,
-       //               @Param("heureFin") LocalTime heureFin,
-       //               @Param("seanceIdToExclude") Long seanceIdToExclude);
-        @Query("SELECT CASE WHEN COUNT(s) > 0 THEN true ELSE false END " +
-           "FROM Seance s " +
-           "WHERE s.salle.id = :salleId " +
-           "  AND s.dateSeance = :date " +
-           "  AND s.estAnnulee = false " +
-           "  AND (s.heureDebut < :heureFin AND s.heureFin > :heureDebut) " +
-           "  AND (:seanceIdToExclude IS NULL OR s.id <> :seanceIdToExclude)")
-    boolean existsConflictingSeances(@Param("salleId") Long salleId,
-                                     @Param("date") LocalDate date,
-                                     @Param("heureDebut") LocalTime heureDebut,
-                                     @Param("heureFin") LocalTime heureFin,
-                                     @Param("seanceIdToExclude") Long seanceIdToExclude);
-
-
-                                     @Query("SELECT CASE WHEN COUNT(s) > 0 THEN true ELSE false END " +
+       // @Param("date") LocalDate date,
+       // @Param("heureDebut") LocalTime heureDebut,
+       // @Param("heureFin") LocalTime heureFin,
+       // @Param("seanceIdToExclude") Long seanceIdToExclude);
+       @Query("SELECT CASE WHEN COUNT(s) > 0 THEN true ELSE false END " +
+                     "FROM Seance s " +
+                     "WHERE s.salle.id = :salleId " +
+                     "  AND s.dateSeance = :date " +
+                     "  AND s.estAnnulee = false " +
+                     "  AND (s.heureDebut < :heureFin AND s.heureFin > :heureDebut) " +
+                     "  AND (:seanceIdToExclude IS NULL OR s.id <> :seanceIdToExclude)")
+       boolean existsConflictingSeances(@Param("salleId") Long salleId,
+                     @Param("date") LocalDate date,
+                     @Param("heureDebut") LocalTime heureDebut,
+                     @Param("heureFin") LocalTime heureFin,
+                     @Param("seanceIdToExclude") Long seanceIdToExclude);
+@Query("SELECT CASE WHEN COUNT(s) > 0 THEN true ELSE false END " +
        "FROM Seance s " +
        "WHERE s.salle.id = :salleId " +
        "  AND s.dateSeance = :date " +
        "  AND s.estAnnulee = false " +
-       "  AND :heureCourante BETWEEN s.heureDebut AND s.heureFin")
+       "  AND s.heureDebut < :heureCourante " +
+       "  AND s.heureFin > :heureCourante")
 boolean existsSeanceEnCours(@Param("salleId") Long salleId,
                             @Param("date") LocalDate date,
                             @Param("heureCourante") LocalTime heureCourante);
