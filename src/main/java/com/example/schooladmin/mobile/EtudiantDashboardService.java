@@ -11,6 +11,8 @@ import com.example.schooladmin.etudiant.etudiant.Etudiant;
 import com.example.schooladmin.etudiant.etudiant.EtudiantRepository;
 import com.example.schooladmin.evaluation.Evaluation;
 import com.example.schooladmin.evaluation.EvaluationRepository;
+import com.example.schooladmin.note.Note;
+import com.example.schooladmin.note.NoteRepository;
 import com.example.schooladmin.seance.Seance;
 import com.example.schooladmin.seance.SeanceRepository;
 import com.example.schooladmin.semestre.Semestre;
@@ -27,6 +29,7 @@ public class EtudiantDashboardService {
     private final EvaluationRepository evaluationRepository;
     private final EtudiantRepository etudiantRepository;
     private final SemestreRepository semestreRepository;
+    private final NoteRepository noteRepository;
 
     public List<Seance> getSeanceByEtudiant(String email) {
         Etudiant etudiant = etudiantRepository.findByDossierAdmissionCandidatEmail(email)
@@ -67,4 +70,10 @@ public List<Semestre> getSemestresByEtudiant(String email) {
 
     return semestreRepository.findByNiveauId(niveauId);
 }
+
+
+//Note de l'etudiant
+     public List<Note> getNotesByEtudiantEmail(String email) {
+        return noteRepository.findByEtudiantDossierAdmissionCandidatEmail(email);
+    }
 }

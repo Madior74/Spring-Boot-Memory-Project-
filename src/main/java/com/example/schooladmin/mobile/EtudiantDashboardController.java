@@ -16,6 +16,7 @@ import com.example.schooladmin.coursModule.CourseModule;
 import com.example.schooladmin.coursModule.ModuleService;
 import com.example.schooladmin.evaluation.Evaluation;
 import com.example.schooladmin.evaluation.dto.EvaluationDTO;
+import com.example.schooladmin.note.NoteDTO;
 import com.example.schooladmin.salle.Salle;
 import com.example.schooladmin.salle.SalleService;
 import com.example.schooladmin.salle.SalleStatutDTO;
@@ -48,10 +49,12 @@ public class EtudiantDashboardController {
   }
 
   @GetMapping("/seances")
-  public List<Seance> getSeancesByNiveau(Authentication authentication) {
+  public List<SeanceDTO> getSeancesByNiveau(Authentication authentication) {
     String email = authentication.getName();
-    return dashboardService.getSeanceByEtudiant(email);
-
+    List<Seance> seances = dashboardService.getSeanceByEtudiant(email);
+    return seances.stream()
+        .map(SeanceDTO::new)
+        .toList();
   }
 
   @GetMapping("/evaluations")
@@ -120,4 +123,15 @@ public class EtudiantDashboardController {
     
         return ResponseEntity.ok(response);
     }
-}
+
+    //Notes By Etudiant
+    @GetMapping("/mes-notes")
+    public ResponseEntity<List<NoteDTO>> getNotesByEtudiant(Authentication authentication) {
+        String email = authentication.getName();
+        List<com.example.schooladmin.note.Note> notes = dashboardService.getNotesByEtudiantEmail(email);
+        List<com.example.schooladmin.note.NoteDTO> dto = notes.stream().map(NoteDTO::new).toList();
+        return ResponseEntity.ok(dto);
+    }
+  
+  
+  }
