@@ -13,6 +13,8 @@ import com.example.schooladmin.evaluation.Evaluation;
 import com.example.schooladmin.evaluation.EvaluationRepository;
 import com.example.schooladmin.seance.Seance;
 import com.example.schooladmin.seance.SeanceRepository;
+import com.example.schooladmin.semestre.Semestre;
+import com.example.schooladmin.semestre.SemestreRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -24,8 +26,7 @@ public class EtudiantDashboardService {
     private final SeanceRepository seanceRepository;
     private final EvaluationRepository evaluationRepository;
     private final EtudiantRepository etudiantRepository;
-
-
+    private final SemestreRepository semestreRepository;
 
     public List<Seance> getSeanceByEtudiant(String email) {
         Etudiant etudiant = etudiantRepository.findByDossierAdmissionCandidatEmail(email)
@@ -37,8 +38,7 @@ public class EtudiantDashboardService {
         return seanceRepository.findSeancesProgrammeesByNiveau(niveauId);
     }
 
-    
-    //Evaluations
+    // Evaluations
     public List<Evaluation> getEvaluationProgrammeesByNiveauId(String email) {
         Etudiant etudiant = etudiantRepository.findByDossierAdmissionCandidatEmail(email)
                 .orElseThrow(() -> new RuntimeException("Étudiant introuvable avec email : " + email));
@@ -49,18 +49,22 @@ public class EtudiantDashboardService {
 
     }
 
+    // //Absences par etudiant
+    public List<Seance> getAssiduiteByEtudiantEmail(String email) {
+        Etudiant etudiant = etudiantRepository.findByDossierAdmissionCandidatEmail(email)
+                .orElseThrow(() -> new RuntimeException("Étudiant introuvable avec email : " + email));
 
+        Long etudiantId = etudiant.getId();
+        return seanceRepository.findSeancesAbsentesByEtudiant(etudiantId, StatutPresence.ABSENT);
+    }
 
+    // getSemestresByEtudiant
 
-
-       // //Absences par etudiant
- public List<Seance> getAssiduiteByEtudiantEmail(String email) {
+public List<Semestre> getSemestresByEtudiant(String email) {
     Etudiant etudiant = etudiantRepository.findByDossierAdmissionCandidatEmail(email)
           .orElseThrow(() -> new RuntimeException("Étudiant introuvable avec email : " + email));
+            Long niveauId = etudiant.getNiveau().getId();
 
-    Long etudiantId = etudiant.getId(); 
-    return seanceRepository.findSeancesAbsentesByEtudiant(etudiantId, StatutPresence.ABSENT);
+    return semestreRepository.findByNiveauId(niveauId);
 }
-
-
 }

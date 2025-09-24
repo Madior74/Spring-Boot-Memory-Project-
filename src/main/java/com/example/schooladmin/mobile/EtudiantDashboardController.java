@@ -14,6 +14,7 @@ import com.example.schooladmin.salle.Salle;
 import com.example.schooladmin.salle.SalleService;
 import com.example.schooladmin.seance.Seance;
 import com.example.schooladmin.seance.SeanceDTO;
+import com.example.schooladmin.semestre.Semestre;
 
 import lombok.RequiredArgsConstructor;
 
@@ -59,4 +60,10 @@ public class EtudiantDashboardController {
     return salleService.getAllSallesWithStatutNow();
   }
 
+  //Semestre Etudiant
+  @GetMapping("/semestres")
+  public List<Semestre> getSemestresByEtudiant(Authentication authentication) {
+    String email = authentication.getName();
+    return dashboardService.getSemestresByEtudiant(email);
+  }
 }
