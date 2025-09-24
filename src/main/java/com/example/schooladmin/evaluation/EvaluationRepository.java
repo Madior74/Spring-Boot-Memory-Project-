@@ -28,6 +28,17 @@ public interface EvaluationRepository extends JpaRepository<Evaluation, Long> {
             @Param("heureDebut") LocalTime heureDebut,
             @Param("heureFin") LocalTime heureFin,
             @Param("evaluationIdToExclude") Long evaluationIdToExclude);
+@Query("SELECT CASE WHEN COUNT(e) > 0 THEN true ELSE false END " +
+       "FROM Evaluation e " +
+       "WHERE e.salle.id = :salleId " +
+       "  AND e.dateEvaluation = :date " +
+       "  AND :heureCourante BETWEEN e.heureDebut AND e.heureFin " +
+       "  AND (:evaluationIdToExclude IS NULL OR e.id <> :evaluationIdToExclude)")
+boolean existsConflictingEvaluationsNow(@Param("salleId") Long salleId,
+                                        @Param("date") LocalDate date,
+                                        @Param("heureCourante") LocalTime heureCourante,
+                                        @Param("evaluationIdToExclude") Long evaluationIdToExclude);
+
 
     @Query("SELECT e FROM Evaluation e " +
             "WHERE e.salle.id = :salleId " +

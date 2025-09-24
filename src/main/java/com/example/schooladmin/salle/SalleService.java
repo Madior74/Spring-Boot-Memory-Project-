@@ -65,6 +65,7 @@ public class SalleService {
     //     return salles;
     // }
 
+
     public List<Salle> getAllSallesWithStatutNow() {
         List<Salle> salles = salleRepository.findAll();
 
@@ -75,8 +76,8 @@ public class SalleService {
             boolean occupeeParSeance = seanceRepository.existsConflictingSeances(
                     salle.getId(), aujourdHui, maintenant, maintenant, null);
 
-            boolean occupeeParEval = evaluationRepository.existsConflictingEvaluations(
-                    salle.getId(), aujourdHui, maintenant, maintenant, null);
+            boolean occupeeParEval = evaluationRepository.existsConflictingEvaluationsNow(
+                    salle.getId(), aujourdHui, maintenant, null);
 
             salle.setOccupee(occupeeParSeance || occupeeParEval);
         }
