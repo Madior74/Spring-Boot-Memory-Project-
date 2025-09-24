@@ -3,6 +3,7 @@ package com.example.schooladmin.salle;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -68,46 +69,6 @@ public class SalleService {
     // return salles;
     // }
 
-    public List<Salle> getAllSallesWithStatutNow() {
-        List<Salle> salles = salleRepository.findAll();
-
-        LocalDate aujourdHui = LocalDate.now();
-        LocalTime maintenant = LocalTime.now();
-
-        System.out.println("=== DIAGNOSTIC COMPLET ===");
-        System.out.println("Date système Java: " + aujourdHui);
-        System.out.println("Heure système Java: " + maintenant);
-        System.out.println("Fuseau horaire: " + ZoneId.systemDefault());
-
-        for (Salle salle : salles) {
-            // Log détaillé pour chaque salle
-            System.out.println("\n--- Salle: " + salle.getNomSalle() + " (ID: " + salle.getId() + ") ---");
-
-            // Vérifier les séances aujourd'hui
-            List<Seance> seancesAujourdhui = seanceRepository.findBySalleIdAndDateSeance(salle.getId(), aujourdHui);
-            System.out.println("Nombre de séances aujourd'hui: " + seancesAujourdhui.size());
-
-            for (Seance seance : seancesAujourdhui) {
-                boolean enCours = !seance.isEstAnnulee() &&
-                        maintenant.isAfter(seance.getHeureDebut()) &&
-                        maintenant.isBefore(seance.getHeureFin());
-
-                System.out.println("Séance " + seance.getId() + ": " +
-                        seance.getHeureDebut() + " - " + seance.getHeureFin() +
-                        " (En cours: " + enCours + ")");
-            }
-
-            boolean occupeeParSeance = seanceRepository.existsSeanceEnCours(
-                    salle.getId(), aujourdHui, maintenant);
-
-            System.out.println("Résultat existsSeanceEnCours: " + occupeeParSeance);
-
-            salle.setOccupee(occupeeParSeance);
-        }
-
-        return salles;
-    }
-
     // Create
     public Salle createSalle(Salle salle) {
         return salleRepository.save(salle);
@@ -130,5 +91,67 @@ public class SalleService {
         boolean usedByEvaluation = salleRepository.isSalleUsedByEvaluation(salleId, date, heureDebut, heureFin);
         return usedBySeance || usedByEvaluation;
     }
+
+
+
+      // Méthode existante (gardée pour compatibilité)
+    public List<Salle> getAllSallesWithStatutNow() {
+        List<Salle> salles = salleRepository.findAll();
+        LocalDate aujourdHui = LocalDate.now();
+        LocalTime maintenant = LocalTime.now();
+
+        for (Salle salle : salles) {
+            boolean occupeeParSeance = seanceRepository.existsSeanceEnCours(
+                    salle.getId(), aujourdHui, maintenant);
+
+            boolean occupeeParEval = evaluationRepository.existsConflictingEvaluationsNow(
+                    salle.getId(), aujourdHui, maintenant, null);
+
+            salle.setOccupee(occupeeParSeance || occupeeParEval);
+        }
+        return salles;
+    }
+    
+    // NOUVELLE méthode avec statut détaillé
+    public List<SalleStatutDTO> getAllSallesWithStatutDetaille() {
+        List<Salle> salles = salleRepository.findAll();
+        LocalDate aujourdHui = LocalDate.now();
+        LocalTime maintenant = LocalTime.now();
+        
+        List<SalleStatutDTO> resultat = new ArrayList<>();
+        
+        for (Salle salle : salles) {
+            // Vérifier si une séance est en cours MAINTENANT
+            boolean occupeeMaintenant = seanceRepository.existsSeanceEnCours(
+                    salle.getId(), aujourdHui, maintenant);
+            
+            // Vérifier s'il y a eu une séance aujourd'hui (même terminée)
+            boolean avaitSeanceAujourdhui = seanceRepository.existsSeanceAujourdhui(
+                    salle.getId(), aujourdHui);
+            
+            // Vérifier les évaluations en cours
+            boolean occupeeParEval = evaluationRepository.existsConflictingEvaluationsNow(
+                    salle.getId(), aujourdHui, maintenant, null);
+            
+            // Si occupée par une évaluation, cela prime
+            if (occupeeParEval) {
+                occupeeMaintenant = true;
+            }
+            
+            SalleStatutDTO dto = new SalleStatutDTO(
+                    salle.getId(),
+                    salle.getNomSalle(),
+                    salle.getEquipements(),
+                    occupeeMaintenant,
+                    avaitSeanceAujourdhui,
+                    null // Le statut sera calculé automatiquement
+            );
+            
+            resultat.add(dto);
+        }
+        
+        return resultat;
+    }
+
 
 }

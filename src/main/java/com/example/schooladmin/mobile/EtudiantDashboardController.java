@@ -59,7 +59,7 @@ public class EtudiantDashboardController {
   public List<Salle> getSallesAvecStatutNow() {
     return salleService.getAllSallesWithStatutNow();
   }
-
+  
   //Semestre Etudiant
   @GetMapping("/semestres")
   public List<Semestre> getSemestresByEtudiant(Authentication authentication) {

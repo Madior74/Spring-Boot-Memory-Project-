@@ -41,7 +41,10 @@ public class SalleController {
         return salleService.getAllSallesWithStatutNow();
     }
 
- 
+       @GetMapping("/statut-detaille")
+    public List<SalleStatutDTO> getSallesStatutDetaille() {
+        return salleService.getAllSallesWithStatutDetaille();
+    }
     
 
     //Create
