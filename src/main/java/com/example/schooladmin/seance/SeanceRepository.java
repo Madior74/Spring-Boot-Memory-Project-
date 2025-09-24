@@ -61,6 +61,18 @@ public interface SeanceRepository extends JpaRepository<Seance, Long> {
                                      @Param("heureFin") LocalTime heureFin,
                                      @Param("seanceIdToExclude") Long seanceIdToExclude);
 
+
+                                     @Query("SELECT CASE WHEN COUNT(s) > 0 THEN true ELSE false END " +
+       "FROM Seance s " +
+       "WHERE s.salle.id = :salleId " +
+       "  AND s.dateSeance = :date " +
+       "  AND s.estAnnulee = false " +
+       "  AND :heureCourante BETWEEN s.heureDebut AND s.heureFin")
+boolean existsSeanceEnCours(@Param("salleId") Long salleId,
+                            @Param("date") LocalDate date,
+                            @Param("heureCourante") LocalTime heureCourante);
+
+
        @Query("SELECT s FROM Seance s " +
                      "WHERE s.salle.id = :salleId " +
                      "  AND s.dateSeance = :date " +

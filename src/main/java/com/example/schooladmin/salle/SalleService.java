@@ -73,8 +73,8 @@ public class SalleService {
         LocalTime maintenant = LocalTime.now();
 
         for (Salle salle : salles) {
-            boolean occupeeParSeance = seanceRepository.existsConflictingSeances(
-                    salle.getId(), aujourdHui, maintenant, maintenant, null);
+            boolean occupeeParSeance = seanceRepository.existsSeanceEnCours(
+                    salle.getId(), aujourdHui, maintenant);
 
             boolean occupeeParEval = evaluationRepository.existsConflictingEvaluationsNow(
                     salle.getId(), aujourdHui, maintenant, null);
