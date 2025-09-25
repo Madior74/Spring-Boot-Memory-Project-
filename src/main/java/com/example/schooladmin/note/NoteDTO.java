@@ -12,6 +12,8 @@ public class NoteDTO {
     private Double valeur;
     private Long etudiantId;
     private Long evaluationId;
+    private String dateEvaluation;
+    private String typeEvaluation;
     private String nomEtudiant;
     private String prenomEtudiant;
     private String moduleName;
@@ -31,6 +33,9 @@ public class NoteDTO {
         this.nomProf=note.getEvaluation() != null && note.getEvaluation().getProfesseur() != null ? note.getEvaluation().getProfesseur().getNom() : null;
         this.prenomProf=note.getEvaluation() != null && note.getEvaluation().getProfesseur() != null ? note.getEvaluation().getProfesseur().getPrenom() : null;
         this.prenomEtudiant=note.getEtudiant() != null ?note.getEtudiant().getDossierAdmission().getCandidat().getNom():null;
+        this.dateEvaluation = note.getEvaluation() != null ? note.getEvaluation().getDateEvaluation().toString() : null;
+        this.typeEvaluation = note.getEvaluation() != null ? note.getEvaluation().getType() : null;
+        
 
     }
 

@@ -11,6 +11,7 @@ import com.example.schooladmin.filiere.Filiere;
 import com.example.schooladmin.filiere.FiliereRepository;
 import com.example.schooladmin.niveau.Niveau;
 import com.example.schooladmin.niveau.NiveauRepository;
+import com.example.schooladmin.activity.ActivityLogService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -26,6 +27,7 @@ public class EtudiantService {
     private final DossierAdmissionRepository admissionRepository;
     private final EtudiantRepository inscriptionRepository;
     private final EtudiantRepository etudiantRepository;
+    private final ActivityLogService activityLogService;
 
     // recuperer tous les inscriptions with dto
 
@@ -55,7 +57,13 @@ public class EtudiantService {
         inscription.setInscritPar(SecurityContextHolder.getContext().getAuthentication().getName());
         inscription.setDateInscription(LocalDateTime.now());
 
-        return inscriptionRepository.save(inscription);
+        Etudiant saved = inscriptionRepository.save(inscription);
+
+        String nom = dossier.getCandidat() != null ? dossier.getCandidat().getNom() : "";
+        String prenom = dossier.getCandidat() != null ? dossier.getCandidat().getPrenom() : "";
+        activityLogService.log("ETUDIANT", "Nouvel étudiant inscrit : " + nom + " " + prenom);
+
+        return saved;
     }
 
    
@@ -70,9 +78,8 @@ public class EtudiantService {
         return inscriptionRepository.findByNiveauId(niveauId);
     }
 
-
     
-
+    
     public Etudiant creerEtudiantDepuisDossier(DossierAdmission dossier) {
         if (!dossier.getStatus().equals("ACCEPTE")) {
             throw new IllegalStateException("Impossible de créer un étudiant : dossier non validé");
@@ -85,7 +92,11 @@ public class EtudiantService {
         etudiant.setDateInscription(LocalDateTime.now());
         etudiant.setInscritPar(dossier.getApprouvePar());
 
-        return etudiantRepository.save(etudiant);
+        Etudiant saved = etudiantRepository.save(etudiant);
+        String nom = candidat != null ? candidat.getNom() : "";
+        String prenom = candidat != null ? candidat.getPrenom() : "";
+        activityLogService.log("ETUDIANT", "Nouvel étudiant inscrit : " + nom + " " + prenom);
+        return saved;
     }
 
     

@@ -16,6 +16,7 @@ import com.example.schooladmin.etudiant.etudiant.EtudiantRepository;
 import com.example.schooladmin.niveau.Niveau;
 import com.example.schooladmin.professeur.ProfesseurRepository;
 import com.example.schooladmin.salle.SalleRepository;
+import com.example.schooladmin.activity.ActivityLogService;
 
 
 import java.time.LocalDate;
@@ -46,6 +47,9 @@ public class SeanceService {
 
     @Autowired
     private AnneeAcademiqueService anneeAcademiqueService;
+
+    @Autowired
+    private ActivityLogService activityLogService;
 
     public List<Seance> getAllSeances() {
         return seanceRepository.findAll();
@@ -106,7 +110,7 @@ public Seance createSeance(SeanceDTO dto) {
     // Sauvegarde de la séance
     Seance createdSeance = seanceRepository.save(seance);
 
-    // 🔹 Récupérer tous les étudiants du niveau du module
+    // �� Récupérer tous les étudiants du niveau du module
     Niveau niveau = createdSeance.getModule().getUe().getSemestre().getNiveau();
     List<Etudiant> etudiants = etudiantRepository.findByNiveauId(niveau.getId());
 
@@ -123,6 +127,8 @@ public Seance createSeance(SeanceDTO dto) {
     }
 
     assiduiteRepository.saveAll(assiduites);
+
+    activityLogService.log("SEANCE", "Nouvelle séance créée le " + createdSeance.getDateSeance() + " de " + createdSeance.getHeureDebut() + " à " + createdSeance.getHeureFin());
 
     return createdSeance;
 }

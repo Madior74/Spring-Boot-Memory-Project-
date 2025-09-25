@@ -14,6 +14,7 @@ import com.example.schooladmin.etudiant.etudiant.EtudiantService;
 import com.example.schooladmin.evaluation.Evaluation;
 import com.example.schooladmin.evaluation.EvaluationRepository;
 import com.example.schooladmin.professeur.ProfesseurRepository;
+import com.example.schooladmin.activity.ActivityLogService;
 
 @Service
 public class NoteService {
@@ -30,6 +31,8 @@ public class NoteService {
     @Autowired
     private EvaluationRepository evaluationRepository;
 
+    @Autowired
+    private ActivityLogService activityLogService;
    
   
 
@@ -72,7 +75,12 @@ public class NoteService {
     newNote.setEvaluation(evaluation);
     newNote.setValeur(dto.getValeur());
 
-    return noteRepository.save(newNote);
+    Note saved = noteRepository.save(newNote);
+    String nom = etudiant.getDossierAdmission() != null && etudiant.getDossierAdmission().getCandidat() != null ? etudiant.getDossierAdmission().getCandidat().getNom() : "";
+    String prenom = etudiant.getDossierAdmission() != null && etudiant.getDossierAdmission().getCandidat() != null ? etudiant.getDossierAdmission().getCandidat().getPrenom() : "";
+    activityLogService.log("NOTE", "Nouvelle note ajoutée pour " + nom + " " + prenom + 
+        " - Évaluation du " + evaluation.getDateEvaluation() + ": " + saved.getValeur());
+    return saved;
 }
 
     // supprimer une note
@@ -100,7 +108,14 @@ public class NoteService {
         existingNote.setEvaluation(evaluationRepository.findById(dto.getEvaluationId()).orElseThrow());
         existingNote.setValeur(dto.getValeur());
 
-        return noteRepository.save(existingNote);
+        Note saved = noteRepository.save(existingNote);
+        Etudiant etu = saved.getEtudiant();
+        Evaluation evaluation = saved.getEvaluation();
+        String nom = etu.getDossierAdmission() != null && etu.getDossierAdmission().getCandidat() != null ? etu.getDossierAdmission().getCandidat().getNom() : "";
+        String prenom = etu.getDossierAdmission() != null && etu.getDossierAdmission().getCandidat() != null ? etu.getDossierAdmission().getCandidat().getPrenom() : "";
+        activityLogService.log("NOTE", "Note mise à jour pour " + nom + " " + prenom +
+            " - Évaluation du " + evaluation.getDateEvaluation() + ": " + saved.getValeur());
+        return saved;
     }
 
     //existence d'une note

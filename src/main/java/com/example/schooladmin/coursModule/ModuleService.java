@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.example.schooladmin.ue.UniteEnseignement;
 import com.example.schooladmin.ue.UniteEnseignementRepository;
+import com.example.schooladmin.activity.ActivityLogService;
 
 import jakarta.transaction.Transactional;
 
@@ -19,7 +20,9 @@ public class ModuleService {
     @Autowired
     private UniteEnseignementRepository ueRepository;
 
-  
+    @Autowired
+    private ActivityLogService activityLogService;
+    
 
     //Get All
     public List<CourseModule> getAllModules() {
@@ -55,7 +58,9 @@ public class ModuleService {
 
 
     public CourseModule saveModule(CourseModule module) {
-        return moduleRepository.save(module);
+        CourseModule saved = moduleRepository.save(module);
+        activityLogService.log("MODULE", "Nouveau module créé : " + saved.getNomModule());
+        return saved;
     }
 
       public List<ModuleWithUeDTO> getAllModulesWithUe() {
@@ -73,6 +78,7 @@ public class ModuleService {
         module.setDateAjout(LocalDateTime.now());
 
         moduleRepository.save(module);
+        activityLogService.log("MODULE", "Module mis à jour : " + module.getNomModule());
     }
 
 

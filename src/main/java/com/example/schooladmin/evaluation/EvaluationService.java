@@ -12,6 +12,7 @@ import com.example.schooladmin.anneeAcademique.AnneeAcademiqueService;
 import com.example.schooladmin.salle.SalleOccupancyService;
 import com.example.schooladmin.salle.SalleOccupiedException;
 import com.example.schooladmin.salle.SalleRepository;
+import com.example.schooladmin.activity.ActivityLogService;
 
 @Service
 public class EvaluationService {
@@ -27,6 +28,9 @@ public class EvaluationService {
 
     @Autowired
     private SalleOccupancyService salleOccupancyService;
+
+    @Autowired
+    private ActivityLogService activityLogService;
 
     // Ajouter une évaluation
     public Evaluation addEvaluation(Evaluation evaluation) {
@@ -53,7 +57,9 @@ public class EvaluationService {
         // Attribuer l'anne active
         evaluation.setAnneeAcademique(anneeAcademiqueService.getActiveAnneeAcademique());
 
-        return evaluationRepository.save(evaluation);
+        Evaluation saved = evaluationRepository.save(evaluation);
+        activityLogService.log("EVALUATION", "Nouvelle évaluation ajoutée pour le " + saved.getDateEvaluation());
+        return saved;
     }
 
     // Get All evaluations
@@ -83,7 +89,9 @@ public class EvaluationService {
             existingEvaluation.setProfesseur(evaluation.getProfesseur());
             existingEvaluation.setDateModification(LocalDateTime.now());
             existingEvaluation.setModifiePar(SecurityContextHolder.getContext().getAuthentication().getName());
-            return evaluationRepository.save(existingEvaluation);
+            Evaluation saved = evaluationRepository.save(existingEvaluation);
+            activityLogService.log("EVALUATION", "Évaluation mise à jour pour le " + saved.getDateEvaluation());
+            return saved;
         }
 
         return null;

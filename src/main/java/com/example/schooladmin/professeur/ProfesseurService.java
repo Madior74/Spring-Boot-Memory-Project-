@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import com.example.schooladmin.specialite.Specialite;
 import com.example.schooladmin.specialite.SpecialiteRepository;
+import com.example.schooladmin.activity.ActivityLogService;
 
 
 @Service
@@ -23,7 +24,9 @@ public class ProfesseurService {
     @Autowired
     private SpecialiteRepository specialiteRepository;
 
-   
+    @Autowired
+    private ActivityLogService activityLogService;
+    
 
     // Récupérer tous les professeurs
     public List<Professeur> getAllProfesseurs() {
@@ -41,7 +44,9 @@ public class ProfesseurService {
 
         professeur.setInscritPar(SecurityContextHolder.getContext().getAuthentication().getName());
         professeur.setDateAjout(LocalDateTime.now());
-        return (professeurRepository.save(professeur));
+        Professeur saved = (professeurRepository.save(professeur));
+        activityLogService.log("PROFESSEUR", "Nouveau professeur ajouté : " + saved.getNom() + " " + saved.getPrenom());
+        return saved;
     }
 
     // Mettre à jour un professeur
