@@ -40,10 +40,10 @@ List<Evaluation> findEvaluationsProgrammees();
 
 
     //Statistiques
-     @Query("SELECT e.filiere.nom AS filiere, COUNT(e) AS total " +
+     @Query("SELECT e.filiere.nomFiliere AS filiere, COUNT(e) AS total " +
            "FROM Etudiant e " +
            "WHERE e.anneeAcademique.id = :anneeId " +
-           "GROUP BY e.filiere.nom")
+           "GROUP BY e.filiere.nomFiliere")
     List<FiliereTendanceDTO> getTendanceParFiliere(@Param("anneeId") Long anneeId);
 
 
