@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 
 import com.example.schooladmin.evaluation.Evaluation;
 import com.example.schooladmin.seance.Seance;
+import com.example.schooladmin.statistique.FiliereTendanceDTO;
 
 import java.util.List;
 import java.util.Optional;
@@ -36,6 +37,14 @@ List<Evaluation> findEvaluationsProgrammees();
 
 
     Optional<Etudiant> findByDossierAdmissionCandidatEmail(String email);
+
+
+    //Statistiques
+     @Query("SELECT e.filiere.nom AS filiere, COUNT(e) AS total " +
+           "FROM Etudiant e " +
+           "WHERE e.anneeAcademique.id = :anneeId " +
+           "GROUP BY e.filiere.nom")
+    List<FiliereTendanceDTO> getTendanceParFiliere(@Param("anneeId") Long anneeId);
 
 
 

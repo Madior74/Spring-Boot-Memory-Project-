@@ -20,6 +20,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/admin/inscriptions")
 public class EtudiantController {
+    @Autowired
+    private com.example.schooladmin.activity.ActivityLogService activityLogService;
 
     @Autowired
     private EtudiantService etudiantService;
@@ -47,6 +49,7 @@ public class EtudiantController {
     public ResponseEntity<?> inscrireEtudiant(@RequestBody Etudiant inscription) {
         try {
             Etudiant saved = etudiantService.ajouterInscription(inscription);
+            activityLogService.log("ETUDIANT", "Ajout d'un étudiant : " + saved.getDossierAdmission().getCandidat().getPrenom()+" "+saved.getDossierAdmission().getCandidat().getNom()+ "dans la filière "+saved.getFiliere().getNomFiliere());
             return ResponseEntity.ok(saved);
         } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("error", e.getMessage()));
@@ -57,6 +60,7 @@ public class EtudiantController {
     @DeleteMapping("/{id}")
     public void deleteInscription(@PathVariable Long id) {
         etudiantRepository.deleteById(id);
+        activityLogService.log("ETUDIANT", "Suppression d'un étudiant (id=" + id + ")");
     }
 
     // Methode Existe ou NOn

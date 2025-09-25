@@ -18,6 +18,8 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/api/admin/seances")
 public class SeanceController {
+    @Autowired
+    private com.example.schooladmin.activity.ActivityLogService activityLogService;
 
     @Autowired
     private SeanceService seanceService;
@@ -57,6 +59,7 @@ public class SeanceController {
     // }
 public ResponseEntity<Seance> createSeance(@RequestBody SeanceDTO dto) {
     Seance createdSeance = seanceService.createSeance(dto);
+    activityLogService.log("SEANCE", "Ajout d'une séance (id=" + createdSeance.getId() + ")");
     return ResponseEntity.status(HttpStatus.CREATED).body(createdSeance);
 }
 
@@ -66,13 +69,16 @@ public ResponseEntity<Seance> createSeance(@RequestBody SeanceDTO dto) {
     // Mettre à jour une séance
     @PutMapping("/{id}")
     public Seance updateSeance(@PathVariable Long id, @RequestBody SeanceDTO dto) {
-        return seanceService.updateSeance(id, dto);
+        Seance updated = seanceService.updateSeance(id, dto);
+        activityLogService.log("SEANCE", "Modification d'une séance (id=" + id + ")");
+        return updated;
     }
 
     //Supprimer une séance
     @DeleteMapping("/{id}")
     public void deleteSeance(@PathVariable Long id) {
         seanceService.deleteSeance(id);
+        activityLogService.log("SEANCE", "Suppression d'une séance (id=" + id + ")");
     }
     // Seance par Module
     @GetMapping("/module/{moduleId}")

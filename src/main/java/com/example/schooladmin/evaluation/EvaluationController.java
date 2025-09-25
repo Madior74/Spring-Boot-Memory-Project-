@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,6 +24,8 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/api/admin/evaluations")
 @RequiredArgsConstructor
 public class EvaluationController {
+    @Autowired
+    private com.example.schooladmin.activity.ActivityLogService activityLogService;
 
     private final EvaluationService evaluationService;
 
@@ -61,6 +64,7 @@ public class EvaluationController {
     @PostMapping("/save")
     public ResponseEntity<Evaluation> addEvaluation(@RequestBody Evaluation evaluation) {
         Evaluation createdEvaluation = evaluationService.addEvaluation(evaluation);
+        activityLogService.log("EVALUATION", "Ajout d'une évaluation (id=" + createdEvaluation.getId() + ")");
         return ResponseEntity.ok(createdEvaluation);
     }
 
@@ -69,6 +73,7 @@ public class EvaluationController {
     public ResponseEntity<Evaluation> updateEvaluation(@PathVariable Long id, @RequestBody Evaluation evaluation) {
         Evaluation updatedEvaluation = evaluationService.updateEvaluation(id, evaluation);
         if (updatedEvaluation != null) {
+            activityLogService.log("EVALUATION", "Modification d'une évaluation (id=" + updatedEvaluation.getId() + ")");
             return ResponseEntity.ok(updatedEvaluation);
         } else {
             return ResponseEntity.notFound().build();
@@ -87,6 +92,7 @@ public class EvaluationController {
     @DeleteMapping("/delete/{id}")
     public void deleteEvaluation(@PathVariable Long id) {
         evaluationService.deleteEvaluation(id);
+        activityLogService.log("EVALUATION", "Suppression d'une évaluation (id=" + id + ")");
     }
 
 }

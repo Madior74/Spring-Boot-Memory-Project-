@@ -21,6 +21,8 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/api/admin/candidat-pre-inscrit")
 public class CandidatController {
+    @Autowired
+    private com.example.schooladmin.activity.ActivityLogService activityLogService;
 
     @Autowired
     private CandidatService candidatPreInscritService;
@@ -36,7 +38,9 @@ public class CandidatController {
     public Candidat ajouterEtudiant(@RequestBody Candidat etudiant) {
         System.out.println("Donnees reçues :" + etudiant);
         etudiant.setRole(Role.ROLE_ETUDIANT);
-        return candidatPreInscritService.ajouterEtudiant(etudiant);
+        Candidat created = candidatPreInscritService.ajouterEtudiant(etudiant);
+        activityLogService.log("CANDIDAT", "Ajout d'un candidat : " + created.getNom());
+        return created;
     }
 
     // Récupérer tous les étudiants
@@ -58,6 +62,7 @@ public class CandidatController {
     @DeleteMapping("/{id}")
     public ResponseEntity<String> supprimerEtudiant(@PathVariable Long id) {
         candidatPreInscritService.supprimerEtudiant(id);
+        activityLogService.log("CANDIDAT", "Suppression d'un candidat (id=" + id + ")");
         return ResponseEntity.ok("Étudiant supprimé avec succès.");
     }
 

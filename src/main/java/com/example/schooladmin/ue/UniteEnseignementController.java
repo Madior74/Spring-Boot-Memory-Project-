@@ -32,9 +32,11 @@ public class UniteEnseignementController {
     @Autowired
     private SemestreService semestreService;
 
-
     @Autowired
     private UniteEnseignementService ueService;
+
+    @Autowired
+    private com.example.schooladmin.activity.ActivityLogService activityLogService;
 
     // Récupérer toutes les UEs
     @GetMapping
@@ -105,7 +107,7 @@ public class UniteEnseignementController {
 
     // Enregistrer l'UE
     UniteEnseignement savedUe = ueService.saveUE(ue);
-
+    activityLogService.log("UE", "Ajout d'une UE : " + savedUe.getNomUE());
     // Réponse avec les données de l'UE ajoutée
     return ResponseEntity.status(HttpStatus.CREATED).body(savedUe);
 }
@@ -127,6 +129,7 @@ public class UniteEnseignementController {
     @DeleteMapping("/{id}")
     public void deleteUE(@PathVariable Long id) {
         ueService.deleteUE(id);
+        activityLogService.log("UE", "Suppression d'une UE (id=" + id + ")");
     }
 //---------------------------------------------------
 
@@ -174,7 +177,7 @@ public class UniteEnseignementController {
 
     // Enregistrer l'UE mise à jour
     UniteEnseignement updatedUE = ueService.saveUE(existingUE);
-
+    activityLogService.log("UE", "Modification d'une UE : " + updatedUE.getNomUE());
     // Réponse avec les données de l'UE mise à jour
     return ResponseEntity.ok(updatedUE);
 }

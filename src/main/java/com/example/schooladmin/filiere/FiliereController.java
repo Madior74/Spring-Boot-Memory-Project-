@@ -27,6 +27,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 @RequestMapping("/api/admin/filieres")
 public class FiliereController {
     @Autowired
+    private com.example.schooladmin.activity.ActivityLogService activityLogService;
+    @Autowired
     private FiliereService filiereService;
 
     @Autowired
@@ -47,12 +49,14 @@ public class FiliereController {
     @PostMapping("/auto")
     public ResponseEntity<Filiere> createFiliere(@RequestBody FiliereRequest request) {
         Filiere filiere = filiereService.createFiliereAvecStructure(request);
+        activityLogService.log("FILIERE", "Ajout d'une filière : " + filiere.getNomFiliere());
         return ResponseEntity.ok(filiere);
     }
 
     @DeleteMapping("/deleteFiliere/{id}")
     public void deleteFiliere(@PathVariable("id") Long id) {
         filiereService.deleteFiliere(id);
+        activityLogService.log("FILIERE", "Suppression d'une filière (id=" + id + ")");
     }
 
     // nombre d'etudiant    
@@ -72,8 +76,9 @@ public class FiliereController {
 
         filiere.setNomFiliere(updatedFiliere.getNomFiliere());
         filiere.setDescription(updatedFiliere.getDescription());
-
-        return filiereRepository.save(filiere);
+        Filiere saved = filiereRepository.save(filiere);
+        activityLogService.log("FILIERE", "Modification d'une filière : " + saved.getNomFiliere());
+        return saved;
     }
 
     @GetMapping("/voir/{id}")

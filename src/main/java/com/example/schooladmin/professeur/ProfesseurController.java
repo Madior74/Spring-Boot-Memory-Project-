@@ -21,6 +21,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 @RestController
 @RequestMapping("/api/admin/professeurs")
 public class ProfesseurController {
+    @Autowired
+    private com.example.schooladmin.activity.ActivityLogService activityLogService;
 
     @Autowired
     private ProfesseurService professeurService;
@@ -42,7 +44,9 @@ public class ProfesseurController {
     public Professeur createProfesseur(@RequestBody Professeur professeur) {
         System.out.println("Donnees du prof reçuess:" + professeur);
         professeur.setRole(Role.ROLE_PROFESSEUR);
-        return professeurService.createProfesseur(professeur);
+        Professeur created = professeurService.createProfesseur(professeur);
+        activityLogService.log("PROFESSEUR", "Ajout d'un professeur : " + created.getNom());
+        return created;
     }
 
     // Mettre à jour un professeur
@@ -53,13 +57,11 @@ public class ProfesseurController {
         System.out.println("Donnees reçues" + professeurDetails);
         if(professeurService.getProfesseurById(id).isPresent()){
             professeurDetails.setId(id);
-                    professeurDetails.setRole(Role.ROLE_PROFESSEUR);
-
-                    return ResponseEntity.ok(professeurService.createProfesseur(professeurDetails));
-
-
+            professeurDetails.setRole(Role.ROLE_PROFESSEUR);
+            Professeur updated = professeurService.createProfesseur(professeurDetails);
+            activityLogService.log("PROFESSEUR", "Modification d'un professeur : " + updated.getNom());
+            return ResponseEntity.ok(updated);
         }
-
         return ResponseEntity.notFound().build();
     }
 
@@ -67,6 +69,7 @@ public class ProfesseurController {
     @DeleteMapping("/{id}")
     public void deleteProfesseur(@PathVariable Long id) {
         professeurService.deleteProfesseur(id);
+        activityLogService.log("PROFESSEUR", "Suppression d'un professeur (id=" + id + ")");
     }
 
     // Specialité d'un professeur
