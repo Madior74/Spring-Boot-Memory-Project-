@@ -1,19 +1,24 @@
 package com.example.schooladmin.mobile;
 
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.schooladmin.coursModule.CourseModule;
 import com.example.schooladmin.coursModule.ModuleService;
+import com.example.schooladmin.emplois_du_temps.EmploiDuTempsService;
+import com.example.schooladmin.emplois_du_temps.EvenementEmploiDuTemps;
 import com.example.schooladmin.evaluation.Evaluation;
 import com.example.schooladmin.evaluation.dto.EvaluationDTO;
 import com.example.schooladmin.note.NoteDTO;
@@ -37,6 +42,7 @@ public class EtudiantDashboardController {
   private final EtudiantDashboardService dashboardService;
   private final UniteEnseignementService ueService;
   private final ModuleService moduleService;
+  private final EmploiDuTempsService emploiDuTempsService;
 
   @GetMapping("/assiduites/mes-absences")
   public ResponseEntity<List<SeanceDTO>> getMesAssiduites(Authentication authentication) {
@@ -146,6 +152,17 @@ public class EtudiantDashboardController {
             errorResponse.put("message", e.getMessage());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
         }
+    }
+
+
+        @GetMapping("/semaine")
+    public ResponseEntity<List<EvenementEmploiDuTemps>> getEmploiDuTemps(
+            @RequestParam Long niveauId,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate debut,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fin) {
+
+        List<EvenementEmploiDuTemps> edt = emploiDuTempsService.genererEmploiDuTemps(niveauId, debut, fin);
+        return ResponseEntity.ok(edt);
     }
 
   }

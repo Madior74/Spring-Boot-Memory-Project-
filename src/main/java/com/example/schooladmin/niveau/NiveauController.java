@@ -6,7 +6,6 @@ import org.springframework.web.bind.annotation.*;
 
 import com.example.schooladmin.dto.FiliereDTO;
 import com.example.schooladmin.dto.NiveauDTO;
-import com.example.schooladmin.emplois_du_temps.EmploiDuTempsDTO;
 import com.example.schooladmin.filiere.Filiere;
 import com.example.schooladmin.filiere.FiliereService;
 import com.example.schooladmin.semestre.Semestre;
@@ -146,17 +145,17 @@ public ResponseEntity<Filiere> getFiliereByNiveauId(@PathVariable Long niveauId)
 
     //EDT
 
-    @GetMapping("/{id}/emploi-du-temps")
-    public ResponseEntity<List<EmploiDuTempsDTO>> getEmploiDuTemps(@PathVariable Long id) {
-        List<EmploiDuTempsDTO> emploi = niveauService.getEmploiDuTempsDTOByNiveauId(id);
-        return ResponseEntity.ok(emploi);
-    }
+    // @GetMapping("/{id}/emploi-du-temps")
+    // public ResponseEntity<List<EmploiDuTempsDTO>> getEmploiDuTemps(@PathVariable Long id) {
+    //     List<EmploiDuTempsDTO> emploi = niveauService.getEmploiDuTempsDTOByNiveauId(id);
+    //     return ResponseEntity.ok(emploi);
+    // }
 
-    @GetMapping("/{id}/emploi-du-temps/grouped")
-    public ResponseEntity<Map<LocalDate, List<EmploiDuTempsDTO>>> getEmploiDuTempsGroupedByDay(@PathVariable Long id) {
-        Map<LocalDate, List<EmploiDuTempsDTO>> emploi = niveauService.getEmploiDuTempsGroupedByDay(id);
-        return ResponseEntity.ok(emploi);
-    }
+    // @GetMapping("/{id}/emploi-du-temps/grouped")
+    // public ResponseEntity<Map<LocalDate, List<EmploiDuTempsDTO>>> getEmploiDuTempsGroupedByDay(@PathVariable Long id) {
+    //     Map<LocalDate, List<EmploiDuTempsDTO>> emploi = niveauService.getEmploiDuTempsGroupedByDay(id);
+    //     return ResponseEntity.ok(emploi);
+    // }
 
 
 }

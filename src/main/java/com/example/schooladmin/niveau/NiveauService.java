@@ -7,7 +7,6 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.example.schooladmin.emplois_du_temps.EmploiDuTempsDTO;
 import com.example.schooladmin.etudiant.etudiant.Etudiant;
 import com.example.schooladmin.etudiant.etudiant.EtudiantRepository;
 import com.example.schooladmin.filiere.Filiere;
@@ -78,19 +77,19 @@ public class NiveauService {
 
 
 
-    public List<EmploiDuTempsDTO> getEmploiDuTempsDTOByNiveauId(Long niveauId) {
-    List<Seance> seances = niveauRepository.findSeancesByNiveauId(niveauId);
-    return seances.stream()
-                  .map(EmploiDuTempsDTO::new)
-                  .collect(Collectors.toList());
-}
+//     public List<EmploiDuTempsDTO> getEmploiDuTempsDTOByNiveauId(Long niveauId) {
+//     List<Seance> seances = niveauRepository.findSeancesByNiveauId(niveauId);
+//     return seances.stream()
+//                   .map(EmploiDuTempsDTO::new)
+//                   .collect(Collectors.toList());
+// }
 
 
 
-//affichage hebdomadaire
-public Map<LocalDate, List<EmploiDuTempsDTO>> getEmploiDuTempsGroupedByDay(Long niveauId) {
-    List<EmploiDuTempsDTO> emploiDuTemps = getEmploiDuTempsDTOByNiveauId(niveauId);
-    return emploiDuTemps.stream()
-                        .collect(Collectors.groupingBy(EmploiDuTempsDTO::getDate));
-}
+// //affichage hebdomadaire
+// public Map<LocalDate, List<EmploiDuTempsDTO>> getEmploiDuTempsGroupedByDay(Long niveauId) {
+//     List<EmploiDuTempsDTO> emploiDuTemps = getEmploiDuTempsDTOByNiveauId(niveauId);
+//     return emploiDuTemps.stream()
+//                         .collect(Collectors.groupingBy(EmploiDuTempsDTO::getDate));
+// }
 }

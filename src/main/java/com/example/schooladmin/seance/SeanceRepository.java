@@ -61,25 +61,25 @@ public interface SeanceRepository extends JpaRepository<Seance, Long> {
                      @Param("heureFin") LocalTime heureFin,
                      @Param("seanceIdToExclude") Long seanceIdToExclude);
 
-      // Méthode existante - AJOUTEZ le fuseau horaire
-    @Query("SELECT CASE WHEN COUNT(s) > 0 THEN true ELSE false END " +
-           "FROM Seance s " +
-           "WHERE s.salle.id = :salleId " +
-           "  AND s.dateSeance = :date " +
-           "  AND s.estAnnulee = false " +
-           "  AND CAST(:heureCourante AS time) BETWEEN s.heureDebut AND s.heureFin")
-    boolean existsSeanceEnCours(@Param("salleId") Long salleId,
-                               @Param("date") LocalDate date,
-                               @Param("heureCourante") LocalTime heureCourante);
-    
-    // NOUVELLE méthode - vérifie si une séance existe aujourd'hui (même passée)
-    @Query("SELECT CASE WHEN COUNT(s) > 0 THEN true ELSE false END " +
-           "FROM Seance s " +
-           "WHERE s.salle.id = :salleId " +
-           "  AND s.dateSeance = :date " +
-           "  AND s.estAnnulee = false")
-    boolean existsSeanceAujourdhui(@Param("salleId") Long salleId,
-                                  @Param("date") LocalDate date);
+       // Méthode existante - AJOUTEZ le fuseau horaire
+       @Query("SELECT CASE WHEN COUNT(s) > 0 THEN true ELSE false END " +
+                     "FROM Seance s " +
+                     "WHERE s.salle.id = :salleId " +
+                     "  AND s.dateSeance = :date " +
+                     "  AND s.estAnnulee = false " +
+                     "  AND CAST(:heureCourante AS time) BETWEEN s.heureDebut AND s.heureFin")
+       boolean existsSeanceEnCours(@Param("salleId") Long salleId,
+                     @Param("date") LocalDate date,
+                     @Param("heureCourante") LocalTime heureCourante);
+
+       // NOUVELLE méthode - vérifie si une séance existe aujourd'hui (même passée)
+       @Query("SELECT CASE WHEN COUNT(s) > 0 THEN true ELSE false END " +
+                     "FROM Seance s " +
+                     "WHERE s.salle.id = :salleId " +
+                     "  AND s.dateSeance = :date " +
+                     "  AND s.estAnnulee = false")
+       boolean existsSeanceAujourdhui(@Param("salleId") Long salleId,
+                     @Param("date") LocalDate date);
 
        @Query("SELECT s FROM Seance s " +
                      "WHERE s.salle.id = :salleId " +
@@ -122,5 +122,11 @@ public interface SeanceRepository extends JpaRepository<Seance, Long> {
                      "WHERE a.etudiant.id = :etudiantId AND a.statutPresence = :statut")
        List<Seance> findSeancesAbsentesByEtudiant(@Param("etudiantId") Long etudiantId,
                      @Param("statut") StatutPresence statut);
+
+       // Emploi du temps
+       @Query("SELECT s FROM Seance s WHERE s.module.ue.semestre.niveau.id = :niveauId AND s.dateSeance BETWEEN :debut AND :fin")
+List<Seance> findByNiveauAndDateBetween(@Param("niveauId") Long niveauId,
+                                        @Param("debut") LocalDate debut,
+                                        @Param("fin") LocalDate fin);
 
 }
