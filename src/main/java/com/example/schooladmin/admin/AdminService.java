@@ -3,6 +3,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -42,7 +43,7 @@ public Admin registerAdmin(RegisterAdminDTO dto) {
     admin.setSexe(dto.getSexe());
     admin.setEmail(dto.getEmail());
     admin.setPassword(passwordEncoder.encode(dto.getPassword()));
-    admin.setRole(Role.ROLE_ADMIN); // On force le rôle ici
+    admin.setRole(Role.ROLE_ADMIN); 
     admin.setDateAjout(LocalDateTime.now());
 
     Region region = new Region();
@@ -52,6 +53,8 @@ public Admin registerAdmin(RegisterAdminDTO dto) {
     Departement departement = new Departement();
     departement.setId(dto.getDepartementId());
     admin.setDepartement(departement);
+    admin.setCreerPar(SecurityContextHolder.getContext().getAuthentication().getName());
+    admin.setDateAjout(LocalDateTime.now());
 
     return adminRepository.save(admin);
 }

@@ -50,9 +50,10 @@ public abstract class Utilisateur {
 
     @Column(unique = true, nullable = false)
     private String ine;
-
+    @Column(unique = true, nullable = false)
     private String telephone;
     private String sexe;
+    @Column(unique = true, nullable = false)
     private String email;
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
