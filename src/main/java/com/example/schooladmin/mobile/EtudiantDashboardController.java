@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.schooladmin.annonce.Annonce;
+import com.example.schooladmin.annonce.AnnonceService;
 import com.example.schooladmin.coursModule.CourseModule;
 import com.example.schooladmin.coursModule.ModuleService;
 import com.example.schooladmin.emplois_du_temps.EmploiDuTempsService;
@@ -39,81 +41,80 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class EtudiantDashboardController {
 
-  private final EtudiantDashboardService dashboardService;
-  private final UniteEnseignementService ueService;
-  private final ModuleService moduleService;
-  private final EmploiDuTempsService emploiDuTempsService;
+    private final EtudiantDashboardService dashboardService;
+    private final UniteEnseignementService ueService;
+    private final ModuleService moduleService;
+    private final EmploiDuTempsService emploiDuTempsService;
+    private final AnnonceService annonceService;
 
-  @GetMapping("/assiduites/mes-absences")
-  public ResponseEntity<List<SeanceDTO>> getMesAssiduites(Authentication authentication) {
-    String email = authentication.getName();
-    List<Seance> asd = dashboardService.getAssiduiteByEtudiantEmail(email);
-    List<SeanceDTO> noteDTOs = asd.stream()
-        .map(SeanceDTO::new)
-        .toList();
-    return ResponseEntity.ok(noteDTOs);
-  }
+    @GetMapping("/assiduites/mes-absences")
+    public ResponseEntity<List<SeanceDTO>> getMesAssiduites(Authentication authentication) {
+        String email = authentication.getName();
+        List<Seance> asd = dashboardService.getAssiduiteByEtudiantEmail(email);
+        List<SeanceDTO> noteDTOs = asd.stream()
+                .map(SeanceDTO::new)
+                .toList();
+        return ResponseEntity.ok(noteDTOs);
+    }
 
-  @GetMapping("/seances")
-  public List<SeanceDTO> getSeancesByNiveau(Authentication authentication) {
-    String email = authentication.getName();
-    List<Seance> seances = dashboardService.getSeanceByEtudiant(email);
-    return seances.stream()
-        .map(SeanceDTO::new)
-        .toList();
-  }
+    @GetMapping("/seances")
+    public List<SeanceDTO> getSeancesByNiveau(Authentication authentication) {
+        String email = authentication.getName();
+        List<Seance> seances = dashboardService.getSeanceByEtudiant(email);
+        return seances.stream()
+                .map(SeanceDTO::new)
+                .toList();
+    }
 
-  @GetMapping("/evaluations")
-  public ResponseEntity<List<EvaluationDTO>> getEvaluationProgrammeesByNiveau(Authentication authentication) {
-    String email = authentication.getName();
-    List<Evaluation> evs = dashboardService.getEvaluationProgrammeesByNiveauId(email);
-    List<EvaluationDTO> dto = evs.stream()
-        .map(EvaluationDTO::new)
-        .toList();
-    return ResponseEntity.ok(dto);
-  }
+    @GetMapping("/evaluations")
+    public ResponseEntity<List<EvaluationDTO>> getEvaluationProgrammeesByNiveau(Authentication authentication) {
+        String email = authentication.getName();
+        List<Evaluation> evs = dashboardService.getEvaluationProgrammeesByNiveauId(email);
+        List<EvaluationDTO> dto = evs.stream()
+                .map(EvaluationDTO::new)
+                .toList();
+        return ResponseEntity.ok(dto);
+    }
 
-  // Salles
-  private final SalleService salleService;
+    // Salles
+    private final SalleService salleService;
 
-  @GetMapping("/salles/statut-now")
-  public List<Salle> getSallesAvecStatutNow() {
-    return salleService.getAllSallesWithStatutNow();
-  }
+    @GetMapping("/salles/statut-now")
+    public List<Salle> getSallesAvecStatutNow() {
+        return salleService.getAllSallesWithStatutNow();
+    }
 
-        @GetMapping("/statut-detaille")
+    @GetMapping("/statut-detaille")
     public List<SalleStatutDTO> getSallesStatutDetaille() {
         return salleService.getAllSallesWithStatutDetaille();
     }
-    
-  
-  //Semestre Etudiant
-  @GetMapping("/semestres")
-  public ResponseEntity<List<SemestreDTO>> getSemestresByEtudiant(Authentication authentication) {
-    String email = authentication.getName();
-    List<Semestre> semestres = dashboardService.getSemestresByEtudiant(email);
-    List<SemestreDTO> dto = semestres.stream()
-    .map(SemestreDTO::new)
-        .toList();
-    return ResponseEntity.ok(dto);
-  }
 
-  //UE
-      @GetMapping("/semestre/{semestreId}")
+    // Semestre Etudiant
+    @GetMapping("/semestres")
+    public ResponseEntity<List<SemestreDTO>> getSemestresByEtudiant(Authentication authentication) {
+        String email = authentication.getName();
+        List<Semestre> semestres = dashboardService.getSemestresByEtudiant(email);
+        List<SemestreDTO> dto = semestres.stream()
+                .map(SemestreDTO::new)
+                .toList();
+        return ResponseEntity.ok(dto);
+    }
+
+    // UE
+    @GetMapping("/semestre/{semestreId}")
     public List<UniteEnseignement> getUEsBySemestre(@PathVariable Long semestreId) {
         return ueService.getUEBySemestre(semestreId);
     }
 
-
-    //Modules By UE
-        //get Module By UE
+    // Modules By UE
+    // get Module By UE
     @GetMapping("/ue/{ueId}")
     public ResponseEntity<Map<String, Object>> getModulesByUe(@PathVariable Long ueId) {
         Map<String, Object> response = new HashMap<>();
-    
+
         // Récupérer les modules associés à l'UE
         List<CourseModule> modules = moduleService.getCourseModulesByUe(ueId);
-    
+
         // Vérifier si des modules ont été trouvés
         if (modules == null || modules.isEmpty()) {
             response.put("status", "ERROR");
@@ -121,16 +122,16 @@ public class EtudiantDashboardController {
             response.put("data", null);
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
         }
-    
+
         // Réponse en cas de succès
         response.put("status", "SUCCESS");
         response.put("message", "Modules récupérés avec succès");
         response.put("data", modules);
-    
+
         return ResponseEntity.ok(response);
     }
 
-    //Notes By Etudiant
+    // Notes By Etudiant
     @GetMapping("/mes-notes")
     public ResponseEntity<List<NoteDTO>> getNotesByEtudiant(Authentication authentication) {
         String email = authentication.getName();
@@ -138,8 +139,8 @@ public class EtudiantDashboardController {
         List<com.example.schooladmin.note.NoteDTO> dto = notes.stream().map(NoteDTO::new).toList();
         return ResponseEntity.ok(dto);
     }
-  
-    //recupererEtudiantParId
+
+    // recupererEtudiantParId
     @GetMapping("/mon-profil")
     public ResponseEntity<?> getEtudiantById(Authentication authentication) {
 
@@ -154,8 +155,7 @@ public class EtudiantDashboardController {
         }
     }
 
-
-        @GetMapping("/semaine")
+    @GetMapping("/semaine")
     public ResponseEntity<List<EvenementEmploiDuTemps>> getEmploiDuTemps(
             @RequestParam Long niveauId,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate debut,
@@ -165,4 +165,14 @@ public class EtudiantDashboardController {
         return ResponseEntity.ok(edt);
     }
 
-  }
+    // Les Annonces
+    @GetMapping("/generales")
+    public ResponseEntity<List<Annonce>> listGenerales() {
+        return ResponseEntity.ok(annonceService.listActivesGenerales());
+    }
+
+    @GetMapping("/niveau/{niveauId}")
+    public ResponseEntity<List<Annonce>> listByNiveau(@PathVariable Long niveauId) {
+        return ResponseEntity.ok(annonceService.listActivesByNiveau(niveauId));
+    }
+}

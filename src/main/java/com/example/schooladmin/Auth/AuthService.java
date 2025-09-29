@@ -6,13 +6,15 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.example.schooladmin.admin.Admin;
 import com.example.schooladmin.admin.AdminRepository;
+import com.example.schooladmin.etudiant.candiddat.Candidat;
 import com.example.schooladmin.etudiant.candiddat.CandidatRepository;
+import com.example.schooladmin.professeur.Professeur;
 import com.example.schooladmin.professeur.ProfesseurRepository;
 import com.example.schooladmin.security.JwtService;
 import com.example.schooladmin.security.RefreshTokenService;
@@ -42,53 +44,51 @@ public class AuthService {
 
     @Autowired
     private AuthenticationManager authenticationManager;
+public Map<String, Object> login(String email, String password) {
+    Utilisateur utilisateur = null;
 
-    public Map<String, Object> login(String email, String password) {
-        authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(email, password));
+    // Cherche dans les 3 repositories
+    Optional<Candidat> candidatOpt = candidatPreInscritRepository.findByEmail(email);
+    Optional<Professeur> professeurOpt = professeurRepository.findByEmail(email);
+    Optional<Admin> adminOpt = adminRepository.findByEmail(email);
 
-        Utilisateur utilisateur = null;
-
-        // Tentative de login dans chaque classe concrète
-        Optional<? extends Utilisateur> found;
-
-        found = candidatPreInscritRepository.findByEmail(email);
-        if (found.isPresent())
-            utilisateur = found.get();
-
-        if (utilisateur == null) {
-            found = professeurRepository.findByEmail(email);
-            if (found.isPresent())
-                utilisateur = found.get();
-        }
-
-        if (utilisateur == null) {
-            found = adminRepository.findByEmail(email);
-            if (found.isPresent())
-                utilisateur = found.get();
-        }
-
-        if (utilisateur == null) {
-            throw new UsernameNotFoundException("Aucun utilisateur trouvé pour l’email : " + email);
-        }
-
-        String accessToken = jwtService.generateToken(utilisateur);
-        String refreshToken = refreshTokenService
-                .createRefreshToken(utilisateur.getEmail(), utilisateur.getRole().name()).getToken();
-
-        Map<String, Object> result = new HashMap<>();
-        result.put("message", "Connexion réussie");
-        result.put("accessToken", accessToken);
-        result.put("refreshToken", refreshToken);
-        result.put("tokenType", "Bearer");
-        result.put("user", Map.of(
-                "email", utilisateur.getEmail(),
-                "role", utilisateur.getRole().name(),
-                "nom", utilisateur.getNom(),
-                "prenom", utilisateur.getPrenom()));
-
-        return result;
+    if (candidatOpt.isPresent()) {
+        utilisateur = candidatOpt.get();
+    } else if (professeurOpt.isPresent()) {
+        utilisateur = professeurOpt.get();
+    } else if (adminOpt.isPresent()) {
+        utilisateur = adminOpt.get();
     }
+
+    // Si aucun utilisateur trouvé
+    if (utilisateur == null) {
+        throw new BadCredentialsException("Identifiants invalides");
+    }
+
+    // Vérifie le mot de passe (en supposant que le mot de passe est encodé avec BCrypt)
+    if (!passwordEncoder.matches(password, utilisateur.getPassword())) {
+        throw new BadCredentialsException("Identifiants invalides");
+    }
+
+    // Génération des tokens
+    String accessToken = jwtService.generateToken(utilisateur);
+    String refreshToken = refreshTokenService
+            .createRefreshToken(utilisateur.getEmail(), utilisateur.getRole().name()).getToken();
+
+    Map<String, Object> result = new HashMap<>();
+    result.put("message", "Connexion réussie");
+    result.put("accessToken", accessToken);
+    result.put("refreshToken", refreshToken);
+    result.put("tokenType", "Bearer");
+    result.put("user", Map.of(
+            "email", utilisateur.getEmail(),
+            "role", utilisateur.getRole().name(),
+            "nom", utilisateur.getNom(),
+            "prenom", utilisateur.getPrenom()
+    ));
+
+    return result;
+}
 
     public Map<String, Object> refreshToken(String refreshToken) {
         RefreshToken token = refreshTokenService.findByToken(refreshToken)

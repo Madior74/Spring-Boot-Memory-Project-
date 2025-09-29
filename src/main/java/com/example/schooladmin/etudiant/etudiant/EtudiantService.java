@@ -61,7 +61,6 @@ public class EtudiantService {
 
         String nom = dossier.getCandidat() != null ? dossier.getCandidat().getNom() : "";
         String prenom = dossier.getCandidat() != null ? dossier.getCandidat().getPrenom() : "";
-        activityLogService.log("ETUDIANT", "Nouvel étudiant inscrit : " + nom + " " + prenom);
 
         return saved;
     }
@@ -80,24 +79,24 @@ public class EtudiantService {
 
     
     
-    public Etudiant creerEtudiantDepuisDossier(DossierAdmission dossier) {
-        if (!dossier.getStatus().equals("ACCEPTE")) {
-            throw new IllegalStateException("Impossible de créer un étudiant : dossier non validé");
-        }
+    // public Etudiant creerEtudiantDepuisDossier(DossierAdmission dossier) {
+    //     if (!dossier.getStatus().equals("ACCEPTE")) {
+    //         throw new IllegalStateException("Impossible de créer un étudiant : dossier non validé");
+    //     }
 
-        Candidat candidat = dossier.getCandidat();
+    //     Candidat candidat = dossier.getCandidat();
        
-        Etudiant etudiant = new Etudiant();
-        etudiant.setDossierAdmission(dossier);
-        etudiant.setDateInscription(LocalDateTime.now());
-        etudiant.setInscritPar(dossier.getApprouvePar());
+    //     Etudiant etudiant = new Etudiant();
+    //     etudiant.setDossierAdmission(dossier);
+    //     etudiant.setDateInscription(LocalDateTime.now());
+    //     etudiant.setInscritPar(dossier.getApprouvePar());
 
-        Etudiant saved = etudiantRepository.save(etudiant);
-        String nom = candidat != null ? candidat.getNom() : "";
-        String prenom = candidat != null ? candidat.getPrenom() : "";
-        activityLogService.log("ETUDIANT", "Nouvel étudiant inscrit : " + nom + " " + prenom);
-        return saved;
-    }
+    //     Etudiant saved = etudiantRepository.save(etudiant);
+    //     String nom = candidat != null ? candidat.getNom() : "";
+    //     String prenom = candidat != null ? candidat.getPrenom() : "";
+    //     activityLogService.log("ETUDIANT", "Nouvel étudiant inscrit : " + nom + " " + prenom);
+    //     return saved;
+    // }
 
     
 

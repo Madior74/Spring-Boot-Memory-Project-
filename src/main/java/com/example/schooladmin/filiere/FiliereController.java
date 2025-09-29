@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
+import com.example.schooladmin.activity.ActivityLogService;
 import com.example.schooladmin.niveau.Niveau;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -27,7 +28,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 @RequestMapping("/api/admin/filieres")
 public class FiliereController {
     @Autowired
-    private com.example.schooladmin.activity.ActivityLogService activityLogService;
+    private ActivityLogService activityLogService;
     @Autowired
     private FiliereService filiereService;
 
