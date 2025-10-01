@@ -24,6 +24,7 @@ import com.example.schooladmin.emplois_du_temps.EvenementEmploiDuTemps;
 import com.example.schooladmin.evaluation.Evaluation;
 import com.example.schooladmin.evaluation.dto.EvaluationDTO;
 import com.example.schooladmin.note.NoteDTO;
+import com.example.schooladmin.note.NoteService;
 import com.example.schooladmin.salle.Salle;
 import com.example.schooladmin.salle.SalleService;
 import com.example.schooladmin.salle.SalleStatutDTO;
@@ -46,6 +47,7 @@ public class EtudiantDashboardController {
     private final ModuleService moduleService;
     private final EmploiDuTempsService emploiDuTempsService;
     private final AnnonceService annonceService;
+    private final NoteService noteService;
 
     @GetMapping("/assiduites/mes-absences")
     public ResponseEntity<List<SeanceDTO>> getMesAssiduites(Authentication authentication) {
@@ -67,14 +69,17 @@ public class EtudiantDashboardController {
     }
 
     @GetMapping("/evaluations")
-    public ResponseEntity<List<EvaluationDTO>> getEvaluationProgrammeesByNiveau(Authentication authentication) {
+    public ResponseEntity<List<EvaluationDTO>> getEvaluationsByNiveau(Authentication authentication) {
         String email = authentication.getName();
-        List<Evaluation> evs = dashboardService.getEvaluationProgrammeesByNiveauId(email);
+        List<Evaluation> evs = dashboardService.getEvaluationsByNiveau(email);
         List<EvaluationDTO> dto = evs.stream()
                 .map(EvaluationDTO::new)
                 .toList();
         return ResponseEntity.ok(dto);
     }
+
+
+    
 
     // Salles
     private final SalleService salleService;
@@ -174,5 +179,11 @@ public class EtudiantDashboardController {
     @GetMapping("/niveau/{niveauId}")
     public ResponseEntity<List<Annonce>> listByNiveau(@PathVariable Long niveauId) {
         return ResponseEntity.ok(annonceService.listActivesByNiveau(niveauId));
+    }
+
+        @GetMapping("/moyenne/{moduleId}")
+    public ResponseEntity<Double> getMoyenneParModule(@PathVariable Long moduleId) {
+        double moyenne = noteService.calculMoyenne(moduleId);
+        return ResponseEntity.ok(moyenne);
     }
 }

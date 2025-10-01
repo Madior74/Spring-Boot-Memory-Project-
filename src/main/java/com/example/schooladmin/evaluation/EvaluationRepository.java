@@ -41,16 +41,6 @@ public interface EvaluationRepository extends JpaRepository<Evaluation, Long> {
                         @Param("heureCourante") LocalTime heureCourante,
                         @Param("evaluationIdToExclude") Long evaluationIdToExclude);
 
-        @Query("SELECT e FROM Evaluation e " +
-                        "WHERE e.salle.id = :salleId " +
-                        "  AND e.dateEvaluation = :date " +
-                        "  AND (e.heureDebut < :heureFin AND e.heureFin > :heureDebut) " +
-                        "  AND (:evaluationIdToExclude IS NULL OR e.id <> :evaluationIdToExclude)")
-        List<Evaluation> findConflictingEvaluations(@Param("salleId") Long salleId,
-                        @Param("date") LocalDate date,
-                        @Param("heureDebut") LocalTime heureDebut,
-                        @Param("heureFin") LocalTime heureFin,
-                        @Param("evaluationIdToExclude") Long evaluationIdToExclude);
 
         List<Evaluation> findBySalleIdAndDateEvaluation(Long salleId, LocalDate date);
 
@@ -58,7 +48,12 @@ public interface EvaluationRepository extends JpaRepository<Evaluation, Long> {
                         "WHERE e.module.ue.semestre.niveau.id = :niveauId " +
 
                         "AND e.dateEvaluation >= CURRENT_DATE")
-        List<Evaluation> findEvaluationsProgrammeesByNiveau(@Param("niveauId") Long niveauId);
+        List<Evaluation> findEvaluationsProgrammeesByNiveau(@Param("niveauId") Long niveauId); 
+        
+        //Evaluations par niveau
+        @Query("SELECT e FROM Evaluation e " +
+                        "WHERE e.module.ue.semestre.niveau.id = :niveauId ")
+        List<Evaluation> findEvaluationsByNiveau(@Param("niveauId") Long niveauId);
         // Emploi du temps
         @Query("SELECT e FROM Evaluation e WHERE e.module.ue.semestre.niveau.id = :niveauId AND e.dateEvaluation BETWEEN :debut AND :fin")
 List<Evaluation> findByNiveauAndDateBetween(@Param("niveauId") Long niveauId,

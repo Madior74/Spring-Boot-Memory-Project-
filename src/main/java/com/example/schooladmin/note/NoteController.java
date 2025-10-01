@@ -100,4 +100,14 @@ System.out.println("Received NoteCreationDTO: " + dto);
         return ResponseEntity.ok(exists);
     }
 
+
+    //Moyenne par Module
+    @GetMapping("/moyenne/{moduleId}")
+    public ResponseEntity<Double> getMoyenneParModule(@PathVariable Long moduleId) {
+        double moyenne = noteService.calculMoyenne(moduleId);
+        return ResponseEntity.ok(moyenne);
+    }
+
+
+
 }

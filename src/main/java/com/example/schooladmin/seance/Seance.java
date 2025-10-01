@@ -21,8 +21,6 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
-
-
 @Getter
 @Setter
 @Entity
@@ -36,50 +34,39 @@ public class Seance {
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate dateSeance;
 
-
-    private LocalTime heureDebut; 
+    private LocalTime heureDebut;
     private LocalTime heureFin;
     private boolean estEnLigne;
     private boolean estAnnulee;
 
-        private String creePar;
-        private LocalDateTime dateModification;
-        private LocalDateTime dateCreation;
+    private String creePar;
+    private LocalDateTime dateModification;
+    private LocalDateTime dateCreation;
 
-        
-
-    
     @ManyToOne
     @JoinColumn(name = "salle_id", nullable = true)
-    @JsonIgnoreProperties({"seances"})
+    @JsonIgnoreProperties({ "seances" })
     private Salle salle;
 
-
     @ManyToOne
-    @JsonIgnoreProperties({"seances"})
+    @JsonIgnoreProperties({ "seances" })
     private CourseModule module;
 
     @ManyToOne
-    @JsonIgnoreProperties({"seances"})
+    @JsonIgnoreProperties({ "seances" })
     private Professeur professeur;
 
     @ManyToOne
-    @JsonIgnoreProperties({"seances"})
+    @JsonIgnoreProperties({ "seances" })
     private AnneeAcademique anneeAcademique;
 
     @OneToMany(mappedBy = "seance", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Assiduite> assiduites = new ArrayList<>();
 
-
-
-
     // Durée en heures
     public int getDureeEnHeures() {
         return (int) Duration.between(heureDebut, heureFin).toHours();
     }
-
-
-
 
     public boolean isDeroulee() {
         if (this.estAnnulee) {
@@ -112,5 +99,4 @@ public class Seance {
         return maintenant.isAfter(debut) && maintenant.isBefore(fin);
     }
 
-    
 }

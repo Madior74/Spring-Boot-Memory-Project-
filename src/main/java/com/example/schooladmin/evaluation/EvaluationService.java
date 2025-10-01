@@ -102,4 +102,10 @@ public class EvaluationService {
         return evaluationRepository.existsByModuleIdAndDateEvaluation(moduleId, dateEvaluation);
     }
 
+
+     //Evaluations par niveau
+    public List<Evaluation> getEvaluationsByNiveau(Long niveauId) {
+        return evaluationRepository.findEvaluationsByNiveau(niveauId);
+    }
+
 }

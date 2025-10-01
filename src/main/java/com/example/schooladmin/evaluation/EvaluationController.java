@@ -95,4 +95,15 @@ public class EvaluationController {
         activityLogService.log("EVALUATION", "Suppression d'une évaluation (id=" + id + ")");
     }
 
+
+    //Evaluations par niveau
+    @GetMapping("/niveau/{niveauId}")
+    public ResponseEntity<List<EvaluationDTO>> getEvaluationsByNiveau(@PathVariable Long niveauId) {
+        List<Evaluation> evaluations = evaluationService.getEvaluationsByNiveau(niveauId);
+        List<EvaluationDTO> dto = evaluations.stream()
+                .map(EvaluationDTO::new)
+                .toList();
+        return ResponseEntity.ok(dto);
+    }
+
 }
