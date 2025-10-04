@@ -17,7 +17,6 @@ public class EvaluationDTO {
     private String type;
     private LocalDate dateEvaluation;
     private Long moduleId;
-    private Long niveauId;
     private Long salleId;
     private Long professeurId;
         private String nomModule;
@@ -33,7 +32,6 @@ public class EvaluationDTO {
         this.type = evaluation.getType();
         this.dateEvaluation = evaluation.getDateEvaluation();
         this.moduleId = evaluation.getModule() != null ? evaluation.getModule().getId() : null;
-        this.niveauId = evaluation.getModule() != null ? evaluation.getModule().getUe().getSemestre().getNiveau().getId() : null;
         this.nomModule = evaluation.getModule() != null ? evaluation.getModule().getNomModule() : null;
         this.salleId = evaluation.getSalle() != null ? evaluation.getSalle().getId() : null;
         this.professeurId = evaluation.getProfesseur() != null ? evaluation.getProfesseur().getId() : null;
