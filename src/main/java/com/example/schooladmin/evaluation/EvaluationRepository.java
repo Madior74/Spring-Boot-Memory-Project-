@@ -59,4 +59,5 @@ public interface EvaluationRepository extends JpaRepository<Evaluation, Long> {
 List<Evaluation> findByNiveauAndDateBetween(@Param("niveauId") Long niveauId,
                                             @Param("debut") LocalDate debut,
                                             @Param("fin") LocalDate fin);
+
 }

@@ -30,5 +30,9 @@ public interface NiveauRepository extends JpaRepository<Niveau, Long> {
     List<Seance> findSeancesByNiveauId(@Param("niveauId") Long niveauId);
 
     
+
+//get niveauId by evaluation
+// @Query("SELECT n FROM Niveau n WHERE n.semestre.ue.module.    ")
+
 }
 
