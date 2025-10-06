@@ -139,36 +139,5 @@ public Map<String, Object> login(String email, String password) {
         refreshTokenService.deleteRefreshToken(refreshToken);
     }
 
-    // public Utilisateur authenticate(String email, String password) {
-    // Utilisateur utilisateur = utilisateurRepository.findByEmail(email)
-    // .orElseThrow(() -> new RuntimeException("Utilisateur non trouvé"));
-
-    // if (!utilisateur.getPassword().equals(password)) {
-    // throw new RuntimeException("Mot de passe incorrect");
-    // }
-
-    // return utilisateur;
-    // }
-
-    // public Map<String, Object> login(String email, String password) {
-    // authenticationManager.authenticate(
-    // new UsernamePasswordAuthenticationToken(email, password));
-
-    // Utilisateur user = userRepository.findByEmailWithRoles(email)
-    // .orElseThrow(() -> new UsernameNotFoundException("Utilisateur non trouvé"));
-
-    // String token = jwtService.generateToken(user); // ⬅️ Utilise la version avec
-    // rôles
-
-    // Map<String, Object> result = new HashMap<>();
-    // result.put("message", "Connexion réussie");
-    // result.put("token", token);
-    // result.put("user", Map.of(
-    // "email", user.getEmail(),
-    // "roles", user.getRoles(),
-    // "prenom", user.getPrenom(),
-    // "nom", user.getNom()));
-
-    // return result;
-    // }
+  
 }

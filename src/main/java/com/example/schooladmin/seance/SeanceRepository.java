@@ -33,21 +33,7 @@ public interface SeanceRepository extends JpaRepository<Seance, Long> {
                      @Param("heureDebut") LocalTime heureDebut,
                      @Param("heureFin") LocalTime heureFin);
 
-       // boolean existsBySalleAndDateSeanceAndHeures(Long salleId, LocalDate date,
-       // LocalTime heure);
-
-       // @Query("SELECT CASE WHEN COUNT(s) > 0 THEN true ELSE false END " +
-       // "FROM Seance s " +
-       // "WHERE s.salle.id = :salleId " +
-       // " AND s.dateSeance = :date " +
-       // " AND s.estAnnulee = false " +
-       // " AND (s.heureDebut < :heureFin AND s.heureFin > :heureDebut) " +
-       // " AND (:seanceIdToExclude IS NULL OR s.id <> :seanceIdToExclude)")
-       // boolean existsConflictingSeances(@Param("salleId") Long salleId,
-       // @Param("date") LocalDate date,
-       // @Param("heureDebut") LocalTime heureDebut,
-       // @Param("heureFin") LocalTime heureFin,
-       // @Param("seanceIdToExclude") Long seanceIdToExclude);
+   
        @Query("SELECT CASE WHEN COUNT(s) > 0 THEN true ELSE false END " +
                      "FROM Seance s " +
                      "WHERE s.salle.id = :salleId " +
@@ -89,8 +75,7 @@ public interface SeanceRepository extends JpaRepository<Seance, Long> {
 
        // Récupérer toutes les séances programmées pour un niveau
        @Query("SELECT s FROM Seance s " +
-                     "WHERE s.module.ue.semestre.niveau.id = :niveauId " +
-                     "AND s.dateSeance >= CURRENT_DATE")
+                     "WHERE s.module.ue.semestre.niveau.id = :niveauId ")
        List<Seance> findSeancesProgrammeesByNiveau(@Param("niveauId") Long niveauId);
 
        // Absent
