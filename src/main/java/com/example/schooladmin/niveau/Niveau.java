@@ -58,6 +58,6 @@ public class Niveau {
 
     @Override
     public String toString() {
-        return nomNiveau; // Retourne le nom du niveau
+        return nomNiveau; 
     }
 }

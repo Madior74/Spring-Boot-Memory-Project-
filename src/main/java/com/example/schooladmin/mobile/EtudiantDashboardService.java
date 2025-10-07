@@ -5,8 +5,6 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
-import com.example.schooladmin.assiduite.Assiduite;
-import com.example.schooladmin.assiduite.AssiduiteRepository;
 import com.example.schooladmin.assiduite.StatutPresence;
 import com.example.schooladmin.etudiant.candiddat.Candidat;
 import com.example.schooladmin.etudiant.candiddat.CandidatRepository;
@@ -43,17 +41,6 @@ public class EtudiantDashboardService {
 
         return seanceRepository.findSeancesProgrammeesByNiveau(niveauId);
     }
-
-    // Evaluations
-    // public List<Evaluation> getEvaluationProgrammeesByNiveauId(String email) {
-    //     Etudiant etudiant = etudiantRepository.findByDossierAdmissionCandidatEmail(email)
-    //             .orElseThrow(() -> new RuntimeException("Étudiant introuvable avec email : " + email));
-
-    //     // Long etudiantId = etudiant.getDossierAdmission().getCandidat().getId();
-    //     Long niveauId = etudiant.getNiveau().getId();
-    //     return evaluationRepository.findEvaluationsProgrammeesByNiveau(niveauId);
-
-    // }
 
     // //Absences par etudiant
     public List<Seance> getAssiduiteByEtudiantEmail(String email) {
