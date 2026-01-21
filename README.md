@@ -28,7 +28,7 @@ SchoolAdmin API est une API REST développée avec Spring Boot pour la gestion a
 
 1. Clonez le dépôt :
    ```bash
-   git clone <url-du-depot>
+   git clone https://github.com/Madior74/Spring-Boot-Memory-Project-.git
    cd SchoolAdmin_API
    ```
 
